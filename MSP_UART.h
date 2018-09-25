@@ -6,6 +6,7 @@ void UART_A0_Init(void); //BG96
 void UART_A1_Init(void); //EMB
 void UART_A2_Init(void); //INP6000
 void UART_A3_Init(void); //EG91
+void Disable_UART(uint32_t UART_Module);
 //////////////////////////////////////////////////////
 
 //UART Baud rate = 115200 baud
@@ -127,5 +128,12 @@ void UART_A3_Init(void) //EG91 UART interface
     MAP_UART_enableInterrupt(EUSCI_A3_BASE, EUSCI_A_UART_RECEIVE_INTERRUPT);
     MAP_Interrupt_enableInterrupt(INT_EUSCIA3);
 }
+
+void Disable_UART(uint32_t UART_Module)
+{
+    MAP_UART_disableInterrupt(UART_Module, EUSCI_A_UART_RECEIVE_INTERRUPT);
+    MAP_UART_disableModule(UART_Module);
+}
+
 
 #endif /* MSP_UART_H_ */

@@ -17,6 +17,7 @@ void EMB_Exchange_Data(void);
 void EMB_Physical_Address_set(void);
 void EMB_Set_AppSKey(void);
 void EMB_Set_NwkSKey(void);
+uint8_t EMB_Get_Output_Power(void);
 
 
 /* Embit-LR1272 Functions */
@@ -45,20 +46,37 @@ uint8_t EMB_Startup(void)
     }
     else
     {
+        /*
         MAP_GPIO_setOutputHighOnPin(GPIO_PORT_P2, GPIO_PIN4); //HW Reset EMB module
+        Systick_delay(1000);
+        MAP_GPIO_setOutputLowOnPin(GPIO_PORT_P2, GPIO_PIN4);
+        */
+
+        EMB_Reset();    //send Reset Command
 
         if (ReceiveCheckEMB() == 1) // checking the checksum of the answer
         {
-            MAP_GPIO_setOutputLowOnPin(GPIO_PORT_P2, GPIO_PIN4);
             status = 0;
             return status;
         }
+
         else
         {
+            Disable_UART(EUSCI_A1_BASE);
+
             return status = 1; //unsuccesfull startup
         }
     }
 }
+
+uint8_t EMB_Get_Output_Power(void)
+{
+    MAP_UART_transmitData(EUSCI_A1_BASE,0x00);
+    MAP_UART_transmitData(EUSCI_A1_BASE,0x04);
+    MAP_UART_transmitData(EUSCI_A1_BASE,0x10);
+    MAP_UART_transmitData(EUSCI_A1_BASE,0x14);
+}
+
 
 void EMB_Dev_Info(void)
 {
@@ -360,6 +378,12 @@ void LoRaEMB_Advanced(void)
 
 void InitLoRaWAN(void)
 {
+    Network = 0;    //active network
+    MCC = 204;  //Mobile Country Code
+    MNC = 8;    //Mobile Network Code
+    Size = 32;    //test data size in bytes
+    SignalStrength = 0;
+
     EMB_Network_Stop();
     while (ReceiveCheckEMB() != 1){}
     EMB_Network_Pref();
@@ -385,6 +409,8 @@ void ConnectLoRaWAN(void)
 void TransmitLoRaWAN(void)
 {
     EMB_Exchange_Data();
+
+
     while (ReceiveCheckEMB() != 1){}
 }
 
