@@ -1,11 +1,19 @@
 #ifndef MSP_UART_H_
 #define MSP_UART_H_
 
+#include <ti/devices/msp432p4xx/driverlib/driverlib.h>
+
+#include <stdint.h>
+#include <stdbool.h>
+#include <stdio.h>
+#include <stdlib.h>
+
 /////////////* function prototypes *//////////////////
 void UART_A0_Init(void); //BG96
 void UART_A1_Init(void); //EMB
 void UART_A2_Init(void); //INP6000
 void UART_A3_Init(void); //EG91
+void Disable_UART(uint32_t UART_Module);
 //////////////////////////////////////////////////////
 
 //UART Baud rate = 115200 baud
@@ -86,7 +94,7 @@ void UART_A1_Init(void) //EMB UART interface
     MAP_GPIO_setAsPeripheralModuleFunctionInputPin(GPIO_PORT_P2, GPIO_PIN2 | GPIO_PIN3, GPIO_PRIMARY_MODULE_FUNCTION);
 
     /* Configuring UART Module */
-    MAP_UART_initModule(EUSCI_A1_BASE, &EMB_UART_Config);
+    MAP_UART_initModule(EUSCI_A1_BASE, &EMB_UART_Config); //&EMB_UART_Config
 
     /* Enable UART module */
     MAP_UART_enableModule(EUSCI_A1_BASE);
@@ -127,5 +135,12 @@ void UART_A3_Init(void) //EG91 UART interface
     MAP_UART_enableInterrupt(EUSCI_A3_BASE, EUSCI_A_UART_RECEIVE_INTERRUPT);
     MAP_Interrupt_enableInterrupt(INT_EUSCIA3);
 }
+
+void Disable_UART(uint32_t UART_Module)
+{
+    MAP_UART_disableInterrupt(UART_Module, EUSCI_A_UART_RECEIVE_INTERRUPT);
+    MAP_UART_disableModule(UART_Module);
+}
+
 
 #endif /* MSP_UART_H_ */

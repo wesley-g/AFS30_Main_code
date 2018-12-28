@@ -7,7 +7,11 @@ void Check_Buttons(void);
 
 volatile uint8_t j;
 uint8_t jj;
-extern volatile uint8_t Module_status = 0;
+volatile int Module_status = 0;
+
+int rssi,rsrp,sinr,rsrq;
+int bcl,vbat;
+int pmic,xo,pa;
 
 void MCU_led(void)
 {
@@ -16,7 +20,6 @@ void MCU_led(void)
 
 void Init_Buttons(void)
 {
-
     MAP_GPIO_setAsOutputPin(GPIO_PORT_P7, GPIO_PIN3); //BG96 Power
     MAP_GPIO_setAsOutputPin(GPIO_PORT_P7, GPIO_PIN2); //BG96 Reset
     MAP_GPIO_setAsOutputPin(GPIO_PORT_P4, GPIO_PIN5); //EG91 Power
@@ -49,24 +52,139 @@ void Check_Buttons(void)
     MAP_GPIO_setOutputHighOnPin(GPIO_PORT_P8, GPIO_PIN6);   //MCU LED on PORT 8 PIN 6
 
 
-    /*-------------------WIFI Button Sequence----------------------*//*
+    /*-------------------WIFI Button Sequence----------------------*/
     if (MAP_GPIO_getInputPinValue(GPIO_PORT_P7, GPIO_PIN4) == 0) //WIFI button
     {
         while (MAP_GPIO_getInputPinValue(GPIO_PORT_P7, GPIO_PIN4) == 0)
         {
-            MAP_GPIO_setOutputLowOnPin(GPIO_PORT_P8, GPIO_PIN6); //MCU LED off
 
-            //UART_A2_Init(); //INP6000 UART Init
+            MAP_GPIO_setOutputLowOnPin(GPIO_PORT_P8, GPIO_PIN6);  //MCU LED low
 
-            MAP_GPIO_setOutputLowOnPin(GPIO_PORT_P8, GPIO_PIN2);
+            Init_ADC_BG96();
 
-            // verfiy UART working
-            // if yes continue else HW reset
+            MAP_GPIO_setOutputHighOnPin(GPIO_PORT_P7, GPIO_PIN0); //ADC Enable HIGH BG96 A0
+
+            Systick_delay(500);
+            Module_status = 1; //van startup naar idle (NC)
+
+            if (BG96_Startup() == 0)
+            {
+
+                //Init_CAT_M();
+                //Connect_2G_BG96();
+                Init_CAT_M();
+                Connect_CAT_M();
+
+                //Init_NB_IOT();
+                //Connect_NB_IOT();
+
+                connect_MyCayenne();
+
+                uart_puts_BG96("AT+QCSQ\r");
+                Systick_delay(100);
+                DataCheck(0);
+                //extract rssi,rsrp,sinr,rsrq
+
+                uart_puts_BG96("AT+CBC\r");
+                Systick_delay(100);
+                DataCheck(1);
+                //extract voltage
+
+                uart_puts_BG96("AT+QTEMP\r");
+                Systick_delay(100);
+                DataCheck(2);
+                //extract pmic,xo,pa temp
+
+                //Module_status = 2; //van startup naar idle (NC)
+
+                send_MyCayenne(0,pmic,1); //channel,data,constant
+                send_MyCayenne(1,xo,1);
+
+                //Module_status = 3; //van startup naar idle (NC)
+
+                send_MyCayenne(2,pa,1);
+                send_MyCayenne(3,vbat,2);
+                send_MyCayenne(4,rssi,3);
+                send_MyCayenne(5,rsrp,3);
+
+
+                //Module_status = 4; //van startup naar idle (NC)
+
+                send_MyCayenne(6,sinr,4);
+                send_MyCayenne(7,rsrq,4);
+                send_MyCayenne(8,bcl,5);
+
+                close_MyCayenne();
+
+/*
+                uart_puts_BG96("AT+QSCLK=0\r"); //DEEP SLEEP
+                Systick_delay(100);
+                ReceiveCheckQuectel();
+
+                uart_puts_BG96("AT+CPSMS=0\r"); //PSM UIT
+                Systick_delay(100);
+                ReceiveCheckQuectel();
+
+                Init_NB_IOT();*/
+/*
+                uart_puts_BG96("AT+QCFG=\"psm/enter\",1\r");
+                Systick_delay(100);
+                ReceiveCheckQuectel();
+*/
+  /*              uart_puts_BG96("AT+CEDRXS=1,5,\"0010\"\r"); //EDRX
+                Systick_delay(100);
+                ReceiveCheckQuectel();
+
+                Module_status = 2;
+
+                uart_puts_BG96("AT+COPS=1,2,\"20404\",9\r"); //Vodafone NB-IoT
+                Systick_delay(2000);
+                ReceiveCheckQuectel();
+
+                uart_puts_BG96("AT+CPSMS=1,,,\"10001010\",\"00000001\"\r");
+                Systick_delay(100);
+                ReceiveCheckQuectel();
+
+                uart_puts_BG96("AT+CSQ\r");
+                Systick_delay(100);
+                QuectelCSQCheck();
+
+                uart_puts_BG96("AT+QNWINFO\r");
+                Systick_delay(100);
+                ReceiveCheckQuectel();
+
+                Module_status = 3;
+
+                uart_puts_BG96("AT+QPING=1,\"8.8.8.8\",15,4\r");
+                Systick_delay(3000);
+                ReceiveCheckQuectel();
+
+                uart_puts_BG96("AT+QSCLK=1\r"); //DEEP SLEEP
+                Systick_delay(100);
+                ReceiveCheckQuectel();
+
+                Disable_UART(EUSCI_A0_BASE);
+
+                Module_status = 4;
+
+                Systick_delay(10000);*/
+            }
+
+            else //failed
+            {
+                for (j = 0; j < 15; j++)
+                {
+                    MAP_GPIO_toggleOutputOnPin(GPIO_PORT_P8, GPIO_PIN6); //MCU LED on
+                    Systick_delay(100);
+                }
+            }
+
+            //MAP_GPIO_setOutputLowOnPin(GPIO_PORT_P7, GPIO_PIN0); //ADC Enable Low BG96 A0
+            //Disable_ADC();
+            //Reset_Index();
+            //Disable_UART(EUSCI_A1_BASE);
         }
-
-        MAP_GPIO_setOutputHighOnPin(GPIO_PORT_P8, GPIO_PIN2);
-    }*/
-
+    }
 
     /*-------------------4G LTE Button Sequence---------------------*/
     if (MAP_GPIO_getInputPinValue(GPIO_PORT_P7, GPIO_PIN5) == 0) // 4G_LTE button
@@ -75,13 +193,14 @@ void Check_Buttons(void)
         {
             Module_status = 1; //van startup naar idle (NC)
             MAP_GPIO_setOutputLowOnPin(GPIO_PORT_P8, GPIO_PIN6);  //MCU LED off
-            MAP_GPIO_setOutputHighOnPin(GPIO_PORT_P4, GPIO_PIN4); //ADC Enable HIGH EG91 A1
 
             Init_ADC_EG91();
+            MAP_GPIO_setOutputHighOnPin(GPIO_PORT_P4, GPIO_PIN4); //ADC Enable HIGH EG91 A1
+
+            Systick_delay(500);
 
             if(EG91_Startup() == 0)//succesful and SIM detected
             {
-                Systick_delay(1000); // om idle (NC) te meten
                 Module_status = 2; //van idle (NC) tot idle (C)
                 Init_4G();
 
@@ -91,7 +210,18 @@ void Check_Buttons(void)
                 Module_status = 4; //van idle (C) naar transmissie naar idle (C)
                 Transmit_4G();
 
-                Systick_delay(15000);
+                MAP_GPIO_setOutputLowOnPin(GPIO_PORT_P4, GPIO_PIN4); //ADC Enable LOW EG91 A1
+                Module_status = 0;
+
+                for (j = 0; j < 4; j++)
+                {
+                    MAP_GPIO_toggleOutputOnPin(GPIO_PORT_P8, GPIO_PIN6); //MCU LED on
+                    Systick_delay(100);
+                }
+
+                EG_Network_Check();
+
+                Disable_UART(EUSCI_A3_BASE);
             }
 
             else //failed
@@ -102,10 +232,13 @@ void Check_Buttons(void)
                     Systick_delay(100);
                 }
             }
-            MAP_GPIO_setOutputLowOnPin(GPIO_PORT_P4, GPIO_PIN4); //ADC Enable HIGH EG91 A1
+
+            MAP_GPIO_setOutputLowOnPin(GPIO_PORT_P4, GPIO_PIN4); //ADC Enable LOW EG91 A1
+            Disable_ADC();
+            Reset_Index();
+
         }
     }
-
 
     /*-------------------LORA Button Sequence----------------------*/
     if (MAP_GPIO_getInputPinValue(GPIO_PORT_P7, GPIO_PIN6) == 0) //LORA button
@@ -114,9 +247,11 @@ void Check_Buttons(void)
         {
             Module_status = 1; //van startup naar idle (NC)
             MAP_GPIO_setOutputLowOnPin(GPIO_PORT_P8, GPIO_PIN6);   //MCU LED low
-            MAP_GPIO_setOutputHighOnPin(GPIO_PORT_P2, GPIO_PIN5);  //ADC Enable HIGH EMB-LR1272 A3
 
             Init_ADC_EMB();
+            MAP_GPIO_setOutputHighOnPin(GPIO_PORT_P2, GPIO_PIN5);  //ADC Enable HIGH EMB-LR1272 A3
+
+            Systick_delay(500);
 
             if (EMB_Startup() == 0)
             {
@@ -128,6 +263,23 @@ void Check_Buttons(void)
 
                 Module_status = 4; //van idle (C) naar transmissie naar idle (C)
                 TransmitLoRaWAN();
+
+                MAP_GPIO_setOutputLowOnPin(GPIO_PORT_P2, GPIO_PIN5);  //ADC Enable HIGH EMB-LR1272 A3
+                Module_status = 0;
+
+                for (j = 0; j < 4; j++)
+                {
+                    MAP_GPIO_toggleOutputOnPin(GPIO_PORT_P8, GPIO_PIN6); //MCU LED on
+                    Systick_delay(100);
+                }
+
+                Disable_UART(EUSCI_A1_BASE);
+
+                if (EG91_Startup() == 0)
+                {
+                    EG_Network_Check();
+                }
+
             }
 
             else //failed
@@ -138,77 +290,128 @@ void Check_Buttons(void)
                     Systick_delay(100);
                 }
             }
+
             MAP_GPIO_setOutputLowOnPin(GPIO_PORT_P2, GPIO_PIN5);  //ADC Enable HIGH EMB-LR1272 A3
+            Disable_ADC();
+            Reset_Index();
+            Disable_UART(EUSCI_A3_BASE);
         }
     }
 
-
     /*-------------------CAT-M Button Sequence----------------------*/
-
     if (MAP_GPIO_getInputPinValue(GPIO_PORT_P7, GPIO_PIN7) == 0) //CAT_M button
     {
         while (MAP_GPIO_getInputPinValue(GPIO_PORT_P7, GPIO_PIN7) == 0)
         {
             Module_status = 1; //van startup naar idle (NC)
             MAP_GPIO_setOutputLowOnPin(GPIO_PORT_P8, GPIO_PIN6);  //MCU LED low
-            MAP_GPIO_setOutputHighOnPin(GPIO_PORT_P7, GPIO_PIN0); //ADC Enable HIGH BG96 A0
 
             Init_ADC_BG96();
 
+            MAP_GPIO_setOutputHighOnPin(GPIO_PORT_P7, GPIO_PIN0); //ADC Enable HIGH BG96 A0
+
+            Systick_delay(500);
+
             if(BG96_Startup() == 0)
             {
-                Systick_delay(2000); // to get to idle
 
                 Module_status = 2; //van idle (NC) tot idle (C)
-                Init_2G_BG96();
-                //Init_CAT_M();
+                Init_CAT_M();
 
                 Module_status = 3; //van idle (NC) tot idle (C)
-                Connect_2G_BG96();
-                //Connect_CAT_M();
+                Connect_CAT_M();
+
+                uart_puts_BG96("AT+CEDRXS=1,5,\"0010\"\r");
+                Systick_delay(500);
+                ReceiveCheckQuectel();
+                /*
+                uart_puts_BG96("AT+QSCLK=1\r");
+                Systick_delay(500);
+                ReceiveCheckQuectel();
+                */
+                connect_MyCayenne();
+
+                uart_puts_BG96("AT+QCSQ\r");
+                Systick_delay(100);
+                DataCheck(0);
+                //extract rssi,rsrp,sinr,rsrq
+
+                uart_puts_BG96("AT+CBC\r");
+                Systick_delay(100);
+                DataCheck(1);
+                //extract voltage
+
+                uart_puts_BG96("AT+QTEMP\r");
+                Systick_delay(100);
+                DataCheck(2);
+                //extract pmic,xo,pa temp
 
                 Module_status = 4;
-                //Transmit_CAT_M();
-                Transmit_2G_BG96();
-                Systick_delay(15000);
 
-               // Init_CAT_M();
+                send_MyCayenne(0,pmic,1); //channel,data,constant
+                //send_MyCayenne(1,xo,1);
+                //send_MyCayenne(2,pa,1);
+                //send_MyCayenne(3,vbat,2);
+                //send_MyCayenne(4,rssi,3);
+                //send_MyCayenne(5,rsrp,3);
+                //send_MyCayenne(6,sinr,4);
+                //send_MyCayenne(7,rsrq,4);
+                //send_MyCayenne(8,bcl,5);
 
-               // Module_status = 3;
-               // Connect_CAT_M();
+                close_MyCayenne();
 
-               // Module_status = 4;
-               // Transmit_CAT_M();
+                MAP_GPIO_setOutputLowOnPin(GPIO_PORT_P7, GPIO_PIN0); //ADC Enable Low BG96 A0
+                Module_status = 0;
+
+
+                for (j = 0; j < 4; j++)
+                {
+                    MAP_GPIO_toggleOutputOnPin(GPIO_PORT_P8, GPIO_PIN6); //MCU LED on
+                    Systick_delay(100);
+                }
+
+                Disable_UART(EUSCI_A0_BASE);
+
+                if (EG91_Startup() == 0)
+                {
+                    EG_Network_Check();
+                }
+
              }
 
             else//failed
             {
-                for(j=0; j<15; j++)
+                for (j = 0; j < 15; j++)
                 {
                     MAP_GPIO_toggleOutputOnPin(GPIO_PORT_P8, GPIO_PIN6); //MCU LED on
                     Systick_delay(100);
                 }
             }
-            MAP_GPIO_setOutputLowOnPin(GPIO_PORT_P7, GPIO_PIN0); //ADC Enable HIGH BG96 A0
+
+            MAP_GPIO_setOutputLowOnPin(GPIO_PORT_P7, GPIO_PIN0); //ADC Enable Low BG96 A0
+            Disable_ADC();
+            Reset_Index();
+            Disable_UART(EUSCI_A3_BASE);
         }
     }
 
 
     /*-------------------NB_IOT Button Sequence----------------------*/
-
     if (MAP_GPIO_getInputPinValue(GPIO_PORT_P8, GPIO_PIN0) == 0) //NB_IOT button
     {
         while (MAP_GPIO_getInputPinValue(GPIO_PORT_P8, GPIO_PIN0) == 0)
         {
+
             Module_status = 1; //van startup naar idle (NC)
             MAP_GPIO_setOutputLowOnPin(GPIO_PORT_P8, GPIO_PIN6);  //MCU LED low
-            MAP_GPIO_setOutputHighOnPin(GPIO_PORT_P7, GPIO_PIN0); //ADC Enable HIGH BG96 A0
 
             Init_ADC_BG96();
+            MAP_GPIO_setOutputHighOnPin(GPIO_PORT_P7, GPIO_PIN0); //ADC Enable HIGH BG96 A0
+
+            Systick_delay(500);
 
             if(BG96_Startup() == 0)
             {
-                Systick_delay(1000);
 
                 Module_status = 2; //van idle (NC) tot idle (C)
                 Init_NB_IOT();
@@ -218,6 +421,23 @@ void Check_Buttons(void)
 
                 Module_status = 4; //van idle (NC) tot idle (C)
                 Transmit_NB_IOT();
+
+                MAP_GPIO_setOutputLowOnPin(GPIO_PORT_P7, GPIO_PIN0); //ADC Enable HIGH BG96 A0
+                Module_status = 0;
+
+                for (j = 0; j < 4; j++)
+                {
+                    MAP_GPIO_toggleOutputOnPin(GPIO_PORT_P8, GPIO_PIN6); //MCU LED on
+                    Systick_delay(100);
+                }
+
+                Disable_UART(EUSCI_A0_BASE);
+
+                if (EG91_Startup() == 0)
+                {
+                    EG_Network_Check();
+                }
+
             }
 
             else//failed
@@ -228,7 +448,11 @@ void Check_Buttons(void)
                     Systick_delay(100);
                 }
             }
+
             MAP_GPIO_setOutputLowOnPin(GPIO_PORT_P7, GPIO_PIN0); //ADC Enable HIGH BG96 A0
+            Disable_ADC();
+            Reset_Index();
+            Disable_UART(EUSCI_A3_BASE);
         }
     }
 }

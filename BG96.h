@@ -1,8 +1,11 @@
 #ifndef BG96_H_
 #define BG96_H_
 
+#define BUFF_SIZE 200
+
 /* BG96 network functions */
 uint8_t BG96_Startup(void);
+void BG96_setting(void);
 
 /* CAT-M */
 void Init_CAT_M(void);
@@ -15,162 +18,172 @@ void Connect_NB_IOT(void);
 void Transmit_NB_IOT(void);
 
 /* 2G GPRS */
-void Init_2G_BG96(void);
 void Connect_2G_BG96(void);
 void Transmit_2G_BG96(void);
 
+/* GPS */
+void GPS_BG96(void);
+void BG_Network_Check(void);
 
 /* Variables */
 uint8_t startup;
+char StringURL[150];
+char StringPost[150];
+char MQTLogin[150];
+char MQTSUB[150];
+char MQTPUB[150];
+char MQTSEND[150];
+char constant[20];
+int PostLength;
 
+char ClientID[] = "16e70430-f480-11e8-9c33-75e6b356cec4";
+char Username[] = "3b83e490-f3c0-11e8-a254-e163efaadfe8";
+char Password[] = "5eaef0ad685ca558a7a9317d60c758976874d3b1";
 
-/* CAT-M Functions */
-void Init_CAT_M(void)
+void BG96_setting(void)
 {
-    uart_puts_BG96("AT+CFUN=0\r");
-    Systick_delay(2000);    // delay nodig
-    ReceiveCheckQuectel();
-
     uart_puts_BG96("AT+QCFG=\"band\",1,80000,80000,1\r");
     ReceiveCheckQuectel();
 
-    uart_puts_BG96("AT+QCFG=\"iotopmode\",0,1\r");
-    ReceiveCheckQuectel();
-
-    uart_puts_BG96("AT+QCFG=\"nwscanseq\",020202,1\r");
+    uart_puts_BG96("AT+QCFG=\"nwscanseq\",030201,1\r");
     ReceiveCheckQuectel();
 
     uart_puts_BG96("AT+QCFG=\"nwscanmode\",3,1\r");
-    ReceiveCheckQuectel();
-
-    uart_puts_BG96("AT+QCFG=\"nbsibscramble\",1\r");
-    ReceiveCheckQuectel();
-
-    //PowerupCheckBG96(1);  //reset
-    //Systick_delay(500); //opstart tijd nodig voordat SIM uitgelezen kan worden
-
-    //check setting op goeie waarde toevoegen?
-    uart_puts_BG96("AT+QCFG=\"nwscanseq\"\r");
-    ReceiveCheckQuectel();
-
-    uart_puts_BG96("AT+QCFG=\"nwscanmode\"\r");
-    ReceiveCheckQuectel();
-
-    uart_puts_BG96("AT+QCFG=\"band\"\r");
-    ReceiveCheckQuectel();
-
-    uart_puts_BG96("AT+QCFG=\"roamservice\"\r");
-    ReceiveCheckQuectel();
-}
-
-void Connect_CAT_M(void)
-{
-    uart_puts_BG96("AT+CFUN=1\r");  //werkt~
-    Systick_delay(2000);    // delay nodig
-    ReceiveCheckQuectel();
-
-    uart_puts_BG96("AT+COPS=?\r");
-    Systick_delay(12500);
-    ReceiveCheckQuectel();
-
-    uart_puts_BG96("AT+COPS= 1,2,\"20408\",8\r"); //NL KPN
-    ReceiveCheckQuectel();
-
-    uart_puts_BG96("AT+QNWINFO\r");
-    ReceiveCheckQuectel();
-}
-
-void Transmit_CAT_M(void)
-{
-    uart_puts_BG96("AT+QPING=1,\"8.8.8.8\",15,4\r");
-    ReceiveCheckQuectel();
-}
-
-/* NB-IoT Functions */
-void Init_NB_IOT(void) //T-Mobile
-{
-    uart_puts_BG96("AT+CIMI\r");
-    uart_puts_BG96("AT+QCFG=\"band\",0,0,80,1\r");
-    uart_puts_BG96("AT+QCFG=\"iotopmode\",1,1\r");
-    uart_puts_BG96("AT+QCFG=\"nwscanseq\",030303,1\r");
-    uart_puts_BG96("AT+QCFG=\"gprsattach\",1\r");
-    uart_puts_BG96("AT+QCFG=\"nwscanmode\",3,1\r");
-    uart_puts_BG96("AT+QCFG=\"nbsibscramble\",1\r");
-    uart_puts_BG96("AT+QCFG=\"servicedomain\",2\r");
-    uart_puts_BG96("AT+QCFG=\"roamservice\",1\r");
-}
-
-void Connect_NB_IOT(void)
-{
-    uart_puts_BG96("AT+COPS= 1,2,\"20416\",9\r"); //T-Mobile
-    uart_puts_BG96("AT+QNWINFO\r");
-}
-
-void Transmit_NB_IOT(void)
-{
-
-}
-
-/* 2G Functions */
-void Init_2G_BG96(void)
-{
-    uart_puts_BG96("AT+CFUN=0\r");
-    Systick_delay(2000);    // delay nodig
-    ReceiveCheckQuectel();
-
-   // uart_puts_BG96("AT+CFUN=1\r");
-   // Systick_delay(2000);    // delay nodig
-   // ReceiveCheckQuectel();
-
-    uart_puts_BG96("AT+QCFG=\"nwscanseq\",010101,1\r");
-    ReceiveCheckQuectel();
-
-    uart_puts_BG96("AT+QCFG=\"nwscanmode\",1,1\r");
-    ReceiveCheckQuectel();
-
-    uart_puts_BG96("AT+QCFG=\"band\",1,80000,80000,1\r");
     ReceiveCheckQuectel();
 
     uart_puts_BG96("AT+QCFG=\"roamservice\",1,1\r");
     ReceiveCheckQuectel();
 
+    uart_puts_BG96("AT+QCFG=\"nbsibscramble\",0\r");
+    ReceiveCheckQuectel();
+}
+
+/* CAT-M Functions */
+void Init_CAT_M(void)
+{
+    Network = 2;    //active network
+    MCC = 204;  //Mobile Country Code
+    MNC = 8;    //Mobile Network Code
+    Size = 128;    //test data size in bytes
+    //Sequence = 0;
+
+    uart_puts_BG96("AT+CFUN=0\r"); //NL KPN
+    Systick_delay(2000);
+    ReceiveCheckQuectel();
+
+    uart_puts_BG96("AT+QCFG=\"iotopmode\",0,1\r");
+    ReceiveCheckQuectel();
+
+    uart_puts_BG96("AT+CGDCONT=1,\"IP\",\"item.webtrial.m2m\"\r"); //KPN
+    Systick_delay(1000);
+    ReceiveCheckQuectel();
+
+    uart_puts_BG96("AT+QICSGP=1,1,\"INTERNET.M2M\"\r"); //KPN
+    Systick_delay(1000);
+    ReceiveCheckQuectel();
+
+    uart_puts_BG96("AT+CFUN=1\r"); //NL KPN
+    Systick_delay(2000);
+    ReceiveCheckQuectel();
+
+    /*
     PowerupCheckBG96(1);  //reset
     Systick_delay(500); //opstart tijd nodig voordat SIM uitgelezen kan worden
-
-    //check setting op goeie waarde toevoegen?
-    uart_puts_BG96("AT+QCFG=\"nwscanseq\"\r");
-    ReceiveCheckQuectel();
-
-    uart_puts_BG96("AT+QCFG=\"nwscanmode\"\r");
-    ReceiveCheckQuectel();
-
-    uart_puts_BG96("AT+QCFG=\"band\"\r");
-    ReceiveCheckQuectel();
-
-    uart_puts_BG96("AT+QCFG=\"roamservice\"\r");
-    ReceiveCheckQuectel();
-
-    //wanneer goed return 1
-
-    //anders return 0
+    */
 }
+
+void Connect_CAT_M(void)
+{
+    uart_puts_BG96("AT+COPS= 1,2,\"20408\",8\r"); //NL KPN
+    Systick_delay(2000);
+    ReceiveCheckQuectel();
+
+    while (counter < 5 && SignalStrength == 0)
+    {
+        uart_puts_EG91("AT+CSQ\r");
+        QuectelCSQCheck();
+        counter++;
+    }
+
+    uart_puts_BG96("AT+QNWINFO\r");
+    Systick_delay(1000);
+    ReceiveCheckQuectel();
+
+    counter = 0;
+}
+
+void Transmit_CAT_M(void)
+{
+    uart_puts_BG96("AT+QPING=1,\"8.8.8.8\",15,4\r");
+    Systick_delay(2000);
+    ReceiveCheckQuectel();
+}
+
+/* NB-IoT Functions */
+void Init_NB_IOT(void) //VODAFONE
+{
+    Network = 3;    //active network
+    MCC = 204;  //Mobile Country Code
+    MNC = 6;    //Mobile Network Code
+    Size = 128;    //test data size in bytes
+   // Sequence = 0;
+
+    uart_puts_BG96("AT+QCFG=\"iotopmode\",2,1\r");
+    ReceiveCheckQuectel();
+
+    uart_puts_BG96("AT+CGDCONT=1,\"IP\",\"nb.inetd.gdsp\"\r"); //VODAFONE
+    Systick_delay(1000);
+    ReceiveCheckQuectel();
+
+    //PowerupCheckBG96(1);  //reset
+    //Systick_delay(500); //opstart tijd nodig voordat SIM uitgelezen kan worden
+}
+
+void Connect_NB_IOT(void)
+{
+    uart_puts_BG96("AT+COPS= 1,2,\"20404\",9\r"); //Vodafone
+    Systick_delay(4000);
+    ReceiveCheckQuectel();
+
+    while (counter < 5 && SignalStrength == 0)
+    {
+        uart_puts_BG96("AT+CSQ\r");
+        QuectelCSQCheck();
+        counter++;
+    }
+
+    uart_puts_BG96("AT+QNWINFO\r");
+    Systick_delay(1000);
+    ReceiveCheckQuectel();
+
+    counter = 0;
+}
+
+void Transmit_NB_IOT(void)
+{
+    uart_puts_BG96("AT+QPING=1,\"8.8.8.8\",15,4\r");
+    Systick_delay(3000);
+    ReceiveCheckQuectel();
+}
+
 
 void Connect_2G_BG96(void)
 {
-    uart_puts_BG96("AT+CFUN=1\r");  //werkt~
-    Systick_delay(2000);    // delay nodig
-    ReceiveCheckQuectel();
-
-    uart_puts_BG96("AT+COPS=?\r");
-    Systick_delay(12500);
-    ReceiveCheckQuectel();
-
     uart_puts_BG96("AT+COPS= 1,2,\"20408\",0\r");
+    Systick_delay(5000);
+    ReceiveCheckQuectel();
+
+    uart_puts_BG96("AT+QNWINFO\r");
     ReceiveCheckQuectel();
 }
 
+/*
 void Transmit_2G_BG96(void)
 {
+    uart_puts_BG96("AT+QIDEACT=1\r");
+    Systick_delay(2000);
+    ReceiveCheckQuectel();
+
     uart_puts_BG96("AT+QHTTPCFG=\"contextid\",1\r");
     ReceiveCheckQuectel();
 
@@ -178,6 +191,10 @@ void Transmit_2G_BG96(void)
     ReceiveCheckQuectel();
 
     uart_puts_BG96("AT+QIACT=1\r");
+    Systick_delay(2500);
+    ReceiveCheckQuectel();
+
+    uart_puts_BG96("AT+QIACT?\r");
     ReceiveCheckQuectel();
 
     uart_puts_BG96("AT+QHTTPCFG=\"sslctxid\",1\r");
@@ -192,34 +209,28 @@ void Transmit_2G_BG96(void)
     uart_puts_BG96("AT+QSSLCFG=\"seclevel\",1,0\r");
     ReceiveCheckQuectel();
 
-    uart_puts_BG96("AT+QHTTPURL=48,80\r");
+    sprintf(StringURL, "https://top-connector.binary-glue.com/network/1\r");
+
+    Systick_delay(100);
+
+    uart_puts_BG96("AT+QHTTPURL=47,80\r");
+    ConnectCheckQuectel();
+
+    uart_puts_BG96(StringURL);
     ReceiveCheckQuectel();
 
-    uart_puts_BG96("https://top-connector.binary-glue.com/network/1\r");
+    PostLength = strlen(StringToSend) - 2;
+
+    sprintf(StringPost, "AT+QHTTPPOST=%d,80\r", PostLength);
+
+    uart_puts_BG96(StringPost); //MESSAGE
+    ConnectCheckQuectel();
+
+    uart_puts_BG96(StringToSend);
+    Systick_delay(2000);
     ReceiveCheckQuectel();
-
-    uart_puts_BG96("AT+QHTTPPOST= 122,80,80\r");//MESSAGE
-    ReceiveCheckQuectel();
-
-    /*
-    Network         = 0;    //active network
-    GNSS_BG96       = true; //GNSS BG96 on / off
-    SignalStrength  = 0;    //Signal Strength in dB
-    GPS_Lat         = 0;    //GPS Latitude
-    GPS_Lon         = 0;    //GPS Longtitude
-    MCC             = 204;  //Mobile Country Code
-    MNC             = 8;    //Mobile Network Code
-    LAC             = 0;    //Location Area Code
-    Cell            = 0;    //Cell information
-    Size            = 0;    //test data size in bytes
-    Sequence        = 0;    //Test data sequence number
-    Samples         = 0;    //Current sample data
-
-*/
-    //StringToSend = {Network,GNSS_BG96,SignalStrength,GPS_Lat,GPS_Lon,MCC,MNC,LAC,Cell,Size,Sequence,Samples};
-
-
 }
+*/
 
 /* Startup Function */
 uint8_t BG96_Startup(void)
@@ -234,12 +245,12 @@ uint8_t BG96_Startup(void)
     }
 
     Systick_delay(500); //opstart tijd nodig voordat SIM uitgelezen kan worden
+
     uart_puts_BG96("AT+CIMI\r");
 
     if (ReceiveCheckQuectel() != 0)
     {
-        PowerupCheckBG96(1);
-        Systick_delay(500); //opstart tijd nodig voordat SIM uitgelezen kan worden
+        PowerupCheckBG96(1); //1
     }
 
     uart_puts_BG96("AT+CIMI\r");
@@ -249,6 +260,157 @@ uint8_t BG96_Startup(void)
     return startup;
 }
 
+void GPS_BG96(void)
+{
+    uart_puts_BG96("AT+QGPS=1\r");
+    ReceiveCheckQuectel();
+
+    for(j = 0; j < 10; j++)
+    {
+        uart_puts_BG96("AT+QGPSLOC=2\r");
+        ConnectCheckQuectel(0);
+    }
+
+    uart_puts_BG96("AT+QGPSLOC=2\r");
+    if(ConnectCheckQuectel(1) == 0)
+    {
+        for (j = 0; j < 4; j++)
+        {
+            MAP_GPIO_toggleOutputOnPin(GPIO_PORT_P8, GPIO_PIN6); //MCU LED on
+            Systick_delay(100);
+        }
+
+        uart_puts_BG96("AT+QGPSEND\r");
+        ReceiveCheckQuectel();
+    }
+
+    for (x = 0; x < BUFF_SIZE; x++)
+    {
+        RXBuffer[x] = 0;
+    }
+}
+/*
+void BG_Network_Check(void)
+{
+
+    uart_puts_BG96("AT+QIACT?\r");
+    if (QuectelOkCheck() == 1)
+    {
+        Connect_2G_BG96();
+
+        Transmit_2G_BG96();
+    }
+
+    uart_puts_BG96("AT+QHTTPURL?\r");
+    if (QuectelOkCheck() == 1)
+    {
+        sprintf(StringURL, "https://top-connector.binary-glue.com/network/1\r");
+
+        Systick_delay(100);
+
+        uart_puts_BG96("AT+QHTTPURL=47,80\r");
+        ConnectCheckQuectel();
+
+        uart_puts_BG96(StringURL);
+        ReceiveCheckQuectel();
+    }
+
+    PostLength = strlen(StringToSend) - 2;
+
+    sprintf(StringPost, "AT+QHTTPPOST=%d,80\r", PostLength);
+
+    uart_puts_BG96(StringPost); //MESSAGE
+    ConnectCheckQuectel();
+
+    uart_puts_BG96(StringToSend);
+    Systick_delay(3000);
+    ReceiveCheckQuectel();
+
+ }*/
+
+// MyCayenne ID Username password
+
+void connect_MyCayenne(void)
+{
+    uart_puts_BG96("AT+QMTOPEN=0,\"mqtt.mydevices.com\",1883\r");
+    Systick_delay(2000);
+    ReceiveCheckQuectel();
+
+    sprintf(MQTLogin,"AT+QMTCONN=0,\"%s\",\"%s\",\"%s\"\r",ClientID,Username,Password);
+
+    uart_puts_BG96(MQTLogin);
+    Systick_delay(2000);
+    ReceiveCheckQuectel();
+}
+
+void send_MyCayenne(int channel, int data, int unit) //subscribe en publish
+{
+    /* Cayenne MyDevices setup
+     *
+     * channel 0 = PMIC temp
+     * channel 1 = XO temp
+     * channel 2 = PA temp
+     * channel 3 = Vbat
+     * channel 4 = rssi
+     * channel 5 = rsrp
+     * channel 6 = sinr
+     * channel 7 = rsrq
+     *
+     * unit 1 = temp (Celcius)
+     * unit 2 = voltage (v)
+     * unit 3 = rssi (dbm)
+     * unit 4 = snr (db)
+     * unit 5 = batt (%)
+     */
+
+    if(unit == 1)
+    {
+         sprintf(constant,"temp,c");
+    }
+    else if (unit == 2)
+    {
+        sprintf(constant,"voltage,mv");
+    }
+    else if (unit == 3)
+    {
+        sprintf(constant,"rssi,dbm");
+    }
+    else if (unit == 4)
+    {
+        sprintf(constant,"snr,db");
+    }
+    else if (unit == 5)
+    {
+        sprintf(constant,"batt,p");
+    }
+
+    sprintf(MQTSUB,"AT+QMTSUB=0,1,\"v1/%s/things/%s/data/%d\",1\r",Username,ClientID,channel);
+
+    uart_puts_BG96(MQTSUB);
+    Systick_delay(2000);
+    ReceiveCheckQuectel();
+
+    sprintf(MQTPUB,"AT+QMTPUB=0,1,1,0,\"v1/%s/things/%s/data/%d\"\r",Username,ClientID,channel);
+
+    uart_puts_BG96(MQTPUB);
+    Systick_delay(2000);
+    ReceiveCheckQuectel();
+
+    sprintf(MQTSEND,"%s=%d",constant,data);
+
+    uart_puts_BG96(MQTSEND);
+    MAP_UART_transmitData(EUSCI_A0_BASE, 0x1A); //ctrl+z
+
+    Systick_delay(2000);
+    ReceiveCheckQuectel();
+}
+
+void close_MyCayenne(void)
+{
+    uart_puts_BG96("AT+QMTDISC=0\r");
+    Systick_delay(2000);
+    ReceiveCheckQuectel();
+}
 
 
 #endif /* BG96_H_ */
