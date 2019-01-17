@@ -14,7 +14,7 @@ void EMB_Network_Adres(void);
 void EMB_Network_ID(void);
 void EMB_Energy_Save_Mode(void);
 void EMB_Network_Start(void);
-void EMB_Exchange_Data(void);
+void EMB_Exchange_Data(uint8_t UDPsize);
 void EMB_Physical_Address_set(void);
 void EMB_Set_AppSKey(void);
 void EMB_Set_NwkSKey(void);
@@ -30,6 +30,8 @@ void TransmitLoRaWAN(void);
 
 
 uint8_t status = 0;
+uint8_t CRC = 0x69;
+uint8_t EMB_length;
 uint8_t EMB_Startup(void);
 
 
@@ -215,9 +217,38 @@ void EMB_Network_Start(void)
 
 }
 
-void EMB_Exchange_Data(void)
+void EMB_Exchange_Data(uint8_t UDPsize)
 {
+    if(UDPsize % 2 == 0)
+    {
+        UDPsize = UDPsize / 2;  //LoRa payload = HEX format (2 bytes in 1 HEX)
+        EMB_length = 7 + UDPsize;
+    }
 
+    else
+    {
+        UDPsize = UDPsize + 1;
+        UDPsize = UDPsize / 2;  //LoRa payload = HEX format (2 bytes in 1 HEX)
+        EMB_length = 7 + UDPsize;
+    }
+
+     MAP_UART_transmitData(EUSCI_A1_BASE,0x00);
+     MAP_UART_transmitData(EUSCI_A1_BASE,EMB_length);
+     MAP_UART_transmitData(EUSCI_A1_BASE,0x50);
+     MAP_UART_transmitData(EUSCI_A1_BASE,0x0C);
+     MAP_UART_transmitData(EUSCI_A1_BASE,0x00);
+     MAP_UART_transmitData(EUSCI_A1_BASE,0x06);
+
+
+     for(s = 0; s < UDPsize; s++)
+     {
+         MAP_UART_transmitData(EUSCI_A1_BASE,0);
+         CRC++;
+     }
+
+     MAP_UART_transmitData(EUSCI_A1_BASE,CRC); // CRC CHECK
+
+     /*
      MAP_UART_transmitData(EUSCI_A1_BASE,0x00);
      MAP_UART_transmitData(EUSCI_A1_BASE,0x0B);
      MAP_UART_transmitData(EUSCI_A1_BASE,0x50);
@@ -229,48 +260,7 @@ void EMB_Exchange_Data(void)
      MAP_UART_transmitData(EUSCI_A1_BASE,0x00); //DATA PART 1
      MAP_UART_transmitData(EUSCI_A1_BASE,0x01); //DATA PART 2
      MAP_UART_transmitData(EUSCI_A1_BASE,0x72); //EBI CRC CHECK
-
-    /*
-    MAP_UART_transmitData(EUSCI_A1_BASE, 0x00);
-    MAP_UART_transmitData(EUSCI_A1_BASE, 0x27);
-    MAP_UART_transmitData(EUSCI_A1_BASE, 0x50);
-    MAP_UART_transmitData(EUSCI_A1_BASE, 0x0C);
-    MAP_UART_transmitData(EUSCI_A1_BASE, 0x00);
-    MAP_UART_transmitData(EUSCI_A1_BASE, 0x06);
-    MAP_UART_transmitData(EUSCI_A1_BASE, 0x01);
-    MAP_UART_transmitData(EUSCI_A1_BASE, 0x02);
-    MAP_UART_transmitData(EUSCI_A1_BASE, 0x03);
-    MAP_UART_transmitData(EUSCI_A1_BASE, 0x04);
-    MAP_UART_transmitData(EUSCI_A1_BASE, 0x05);
-    MAP_UART_transmitData(EUSCI_A1_BASE, 0x06);
-    MAP_UART_transmitData(EUSCI_A1_BASE, 0x07);
-    MAP_UART_transmitData(EUSCI_A1_BASE, 0x08);
-    MAP_UART_transmitData(EUSCI_A1_BASE, 0x09);
-    MAP_UART_transmitData(EUSCI_A1_BASE, 0x10);
-    MAP_UART_transmitData(EUSCI_A1_BASE, 0x11);
-    MAP_UART_transmitData(EUSCI_A1_BASE, 0x12);
-    MAP_UART_transmitData(EUSCI_A1_BASE, 0x13);
-    MAP_UART_transmitData(EUSCI_A1_BASE, 0x14);
-    MAP_UART_transmitData(EUSCI_A1_BASE, 0x15);
-    MAP_UART_transmitData(EUSCI_A1_BASE, 0x16);
-    MAP_UART_transmitData(EUSCI_A1_BASE, 0x01);
-    MAP_UART_transmitData(EUSCI_A1_BASE, 0x02);
-    MAP_UART_transmitData(EUSCI_A1_BASE, 0x03);
-    MAP_UART_transmitData(EUSCI_A1_BASE, 0x04);
-    MAP_UART_transmitData(EUSCI_A1_BASE, 0x05);
-    MAP_UART_transmitData(EUSCI_A1_BASE, 0x06);
-    MAP_UART_transmitData(EUSCI_A1_BASE, 0x07);
-    MAP_UART_transmitData(EUSCI_A1_BASE, 0x08);
-    MAP_UART_transmitData(EUSCI_A1_BASE, 0x09);
-    MAP_UART_transmitData(EUSCI_A1_BASE, 0x10);
-    MAP_UART_transmitData(EUSCI_A1_BASE, 0x11);
-    MAP_UART_transmitData(EUSCI_A1_BASE, 0x12);
-    MAP_UART_transmitData(EUSCI_A1_BASE, 0x13);
-    MAP_UART_transmitData(EUSCI_A1_BASE, 0x14);
-    MAP_UART_transmitData(EUSCI_A1_BASE, 0x15);
-    MAP_UART_transmitData(EUSCI_A1_BASE, 0x16);
-    MAP_UART_transmitData(EUSCI_A1_BASE, 0xED);
-*/
+     */
 }
 
 void EMB_Physical_Address_set(void)
@@ -352,7 +342,7 @@ void LoRaEMB(void)
     EMB_Network_Stop();
     EMB_Energy_Save_Mode();
     EMB_Network_start();
-    EMB_Exchange_Data();
+    EMB_Exchange_Data(Size);
 }
 
 void LoRaEMB_Advanced(void)
@@ -373,7 +363,7 @@ void LoRaEMB_Advanced(void)
     while (ReceiveCheckEMB() != 1){}
     EMB_Network_Start();
     while (ReceiveCheckEMB() != 1){}
-    EMB_Exchange_Data();
+    EMB_Exchange_Data(Size);
     while (ReceiveCheckEMB() != 1){}
 }
 
@@ -382,8 +372,6 @@ void InitLoRaWAN(void)
     Network = 0;    //active network
     MCC = 204;  //Mobile Country Code
     MNC = 8;    //Mobile Network Code
-    Size = 32;    //test data size in bytes
-    Sequence = 0;
     SignalStrength = 0;
 
     EMB_Network_Stop();
@@ -410,7 +398,7 @@ void ConnectLoRaWAN(void)
 
 void TransmitLoRaWAN(void)
 {
-    EMB_Exchange_Data();
+    EMB_Exchange_Data(Size);
 
 
     while (ReceiveCheckEMB() != 1){}

@@ -6,6 +6,7 @@
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <ti/grlib/grlib.h>        // graphics library
 
 #include <GPIO.h>            // GPIO header file
 #include <Current.h>         // current monitoring header file
@@ -49,14 +50,34 @@ int main(void)
     MAP_GPIO_setOutputLowOnPin(GPIO_PORT_P8, GPIO_PIN6);   //MCU LED on PORT 8 PIN 6
 
     BG96_Startup();
-    BG96_setting(); // set NB-IoT and CAT-M settings
     EG91_Startup();
+    BG96_setting(); // set NB-IoT and CAT-M settings
 
     while (1)
     {
-        Check_Buttons();
-    }
+        Check_Buttons();  // invoer welke netwerken  <--------------
+        Size = 20;       // invoer bytes            <--------------
 
+        if (select4 == 1)
+        {
+            LTE_4G(Size);
+        }
+
+        if (selectL == 1)
+        {
+            LoRa(Size);
+        }
+
+        if (selectC == 1)
+        {
+            CAT_M(Size);
+        }
+
+        if (selectN == 1)
+        {
+            NB_IoT(Size);
+        }
+    }
 } // end of main
 
 /* EUSCI A0 UART ISR */

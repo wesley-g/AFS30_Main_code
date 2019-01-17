@@ -52,6 +52,8 @@ Main.obj: C:/ti/ccsv8/tools/compiler/ti-cgt-arm_18.1.1.LTS/include/_ti_config.h
 Main.obj: C:/ti/ccsv8/tools/compiler/ti-cgt-arm_18.1.1.LTS/include/linkage.h
 Main.obj: C:/ti/ccsv8/tools/compiler/ti-cgt-arm_18.1.1.LTS/include/stdarg.h
 Main.obj: C:/ti/ccsv8/tools/compiler/ti-cgt-arm_18.1.1.LTS/include/stdlib.h
+Main.obj: C:/ti/simplelink_msp432p4_sdk_2_10_00_14/source/ti/grlib/grlib.h
+Main.obj: C:/ti/ccsv8/tools/compiler/ti-cgt-arm_18.1.1.LTS/include/assert.h
 Main.obj: C:/Users/wesley/workspace_v8/AFS30_Main_code/GPIO.h
 Main.obj: C:/Users/wesley/workspace_v8/AFS30_Main_code/Current.h
 Main.obj: C:/Users/wesley/workspace_v8/AFS30_Main_code/Message_handler.h
@@ -114,6 +116,8 @@ C:/ti/ccsv8/tools/compiler/ti-cgt-arm_18.1.1.LTS/include/_ti_config.h:
 C:/ti/ccsv8/tools/compiler/ti-cgt-arm_18.1.1.LTS/include/linkage.h: 
 C:/ti/ccsv8/tools/compiler/ti-cgt-arm_18.1.1.LTS/include/stdarg.h: 
 C:/ti/ccsv8/tools/compiler/ti-cgt-arm_18.1.1.LTS/include/stdlib.h: 
+C:/ti/simplelink_msp432p4_sdk_2_10_00_14/source/ti/grlib/grlib.h: 
+C:/ti/ccsv8/tools/compiler/ti-cgt-arm_18.1.1.LTS/include/assert.h: 
 C:/Users/wesley/workspace_v8/AFS30_Main_code/GPIO.h: 
 C:/Users/wesley/workspace_v8/AFS30_Main_code/Current.h: 
 C:/Users/wesley/workspace_v8/AFS30_Main_code/Message_handler.h: 

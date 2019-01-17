@@ -30,7 +30,7 @@ volatile uint8_t i = 0, x = 0, y = 0 , ii = 0, counter = 0;
 volatile uint8_t TXData;
 volatile uint8_t RXBuffer[BUFF_SIZE];
 volatile uint8_t AT_Error = 0;
-volatile uint8_t RDYBuffer[3]= {82,68,89}; // Quectel RDY Buffer
+volatile uint8_t RDYBuffer[3]= {82, 68, 89}; // Quectel RDY Buffer
 volatile uint8_t OKBuffer[4] = {79, 75, 13, 10 }; //Quectel  OK,/x0d,/x0a
 volatile uint8_t ERRORBuffer[7] = {69, 82, 82, 79, 82, 13, 10 }; //Quectel ERROR/x0d,/x0a
 extern int message2 = 1;
@@ -51,7 +51,7 @@ int Sequence;     //Test data sequence number
 int m_characters;
 
 static volatile uint_fast16_t Samples[800];       //Current sample data
-char StringToSend[5000];
+char StringToSend[10000];
 int s,r;
 int GPS_Count = 0;
 char tempchar[8];
@@ -106,15 +106,19 @@ void Build_message(void)
 
 void Message_counter(void)
 {
-     m_characters = MovAvgIdleIndex + MovAvgInitialisingIndex + MovAvgConnectedIndex + MovAvgTransmissionIndex;
+    m_characters = MovAvgIdleIndex + MovAvgInitialisingIndex + MovAvgConnectedIndex + MovAvgTransmissionIndex;
 
-    if (m_characters >= 800)
+    message2 = 1;
+
+    /*
+
+    if (m_characters >= 900)
     {
-        if (m_characters >= 1600)
+        if (m_characters >= 1800)
         {
-            if (m_characters >= 2400)
+            if (m_characters >= 2700)
             {
-                if (m_characters >= 3200)
+                if (m_characters >= 3600)
                 {
 
                 }
@@ -136,7 +140,7 @@ void Message_counter(void)
     else
     {
         message2 = 1;
-    }
+    }*/
 }
 
 void Create_Message(void)
@@ -184,7 +188,7 @@ void Create_Message(void)
 
         MovAvgInitialisingIndex = MovAvgInitialisingIndex + MovAvgIdleIndex;
 
-        if (MovAvgInitialisingIndex >= 800)
+        if (MovAvgInitialisingIndex >= 3200)
         {
             Build_message();
             MovAvgInitialisingIndex = 0;
@@ -207,7 +211,7 @@ void Create_Message(void)
 
         MovAvgConnectedIndex = MovAvgConnectedIndex + MovAvgInitialisingIndex;
 
-        if (MovAvgConnectedIndex >= 800)
+        if (MovAvgConnectedIndex >= 3200)
         {
             Build_message();
             MovAvgConnectedIndex = 0;
@@ -231,7 +235,7 @@ void Create_Message(void)
         MovAvgTransmissionIndex = MovAvgTransmissionIndex
                 + MovAvgConnectedIndex;
 
-        if (MovAvgTransmissionIndex >= 800)
+        if (MovAvgTransmissionIndex >= 3200)
         {
             Build_message();
             MovAvgTransmissionIndex = 0;
@@ -288,7 +292,7 @@ uint8_t PowerupCheckBG96(uint8_t Power)
     if (Power == 0)
     {
         MAP_GPIO_setOutputHighOnPin(GPIO_PORT_P7, GPIO_PIN3); // Power BG96 high
-        Systick_delay(1000);
+        Systick_delay(500);
         MAP_GPIO_setOutputLowOnPin(GPIO_PORT_P7, GPIO_PIN3); //Power BG96 low
     }
 
@@ -296,7 +300,7 @@ uint8_t PowerupCheckBG96(uint8_t Power)
     if (Power == 1)
     {
         MAP_GPIO_setOutputHighOnPin(GPIO_PORT_P7, GPIO_PIN2); // reset BG96 high
-        Systick_delay(500);
+        Systick_delay(200);
         MAP_GPIO_setOutputLowOnPin(GPIO_PORT_P7, GPIO_PIN2); //Power BG96 low
     }
 
@@ -334,14 +338,14 @@ uint8_t PowerupCheckEG91(uint8_t Power) // if power == 0 Power // if power == 1 
     if (Power == 0)
     {
         MAP_GPIO_setOutputHighOnPin(GPIO_PORT_P4, GPIO_PIN5); // Power EG91 high
-        Systick_delay(1000);
+        Systick_delay(300);
         MAP_GPIO_setOutputLowOnPin(GPIO_PORT_P4, GPIO_PIN5); // Power EG91 high
     }
 
     if (Power == 1)
     {
         MAP_GPIO_setOutputHighOnPin(GPIO_PORT_P4, GPIO_PIN6); // reset EG91 high
-        Systick_delay(500);
+        Systick_delay(200);
         MAP_GPIO_setOutputLowOnPin(GPIO_PORT_P4, GPIO_PIN6); // reset EG91 high
     }
 

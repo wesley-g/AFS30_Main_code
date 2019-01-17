@@ -148,27 +148,22 @@ void Disable_ADC(void)
     MAP_ADC14_disableSampleTimer();
     MAP_ADC14_disableModule();
 
-    for (xx = 0; xx < 13; xx++)
-    {
-        Readings[xx] = 0;
-    }
-
-    for (xx = 0; xx < 50; xx++)
+    for (xx = 0; xx < 800; xx++)
     {
         MovAvgIdle[xx] = 0;
     }
 
-    for (xx = 0; xx < 250; xx++)
+    for (xx = 0; xx < 800; xx++)
     {
         MovAvgInitialising[xx] = 0;
     }
 
-    for (xx = 0; xx < 250; xx++)
+    for (xx = 0; xx < 800; xx++)
     {
         MovAvgConnected[xx] = 0;
     }
 
-    for (xx = 0; xx < 250; xx++)
+    for (xx = 0; xx < 800; xx++)
     {
         MovAvgTransmission[xx] = 0;
     }

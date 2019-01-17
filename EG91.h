@@ -8,7 +8,7 @@ uint8_t EG91_Startup(void);
 /* 4G LTE */
 void Init_4G(void);
 void Connect_4G(void);
-void Transmit_4G(void);
+void Transmit_4G(uint8_t UDPsize);
 
 /* 3G UMTS */
 //void Init_3G(void);
@@ -31,8 +31,6 @@ void Init_4G(void)
     Network = 4;    //active network
     MCC = 204;  //Mobile Country Code
     MNC = 8;    //Mobile Network Code
-    Size = 128;    //test data size in bytes
-    //Sequence = 0;
 
     uart_puts_EG91("AT+CFUN=0\r");
     Systick_delay(3000);    // delay nodig
@@ -60,13 +58,40 @@ void Connect_4G(void)
     }
 
     counter = 0;
-
 }
 
-void Transmit_4G(void)
+void Transmit_4G(uint8_t UDPsize)
 {
-    uart_puts_EG91("AT+QPING=1,\"8.8.8.8\",15,4\r");
-    Systick_delay(2000);
+    uart_puts_EG91("AT+QIACT=1\r");
+    Systick_delay(1000);
+    ReceiveCheckQuectel();
+
+    uart_puts_EG91("AT+QIOPEN=1,0,\"TCP\",\"220.180.239.212\",8009,0,1\r"); //NL KPN
+    Systick_delay(100);
+    ReceiveCheckQuectel();
+
+    for (s = 0; s < UDPsize; s++)
+    {
+        sprintf(TransmitSize, "1%s", TransmitSize);
+    }
+
+    uart_puts_EG91("AT+QISEND=0\r");
+    Systick_delay(100);
+    ReceiveCheckQuectel();
+
+    uart_puts_EG91(TransmitSize); //Stuur UDP bericht
+    Systick_delay(100);
+    ReceiveCheckQuectel();
+
+    MAP_UART_transmitData(EUSCI_A3_BASE, 0x1a);// CTRL+Z
+    ReceiveCheckQuectel();
+
+    uart_puts_EG91("AT+QICLOSE\r");
+    Systick_delay(100);
+    ReceiveCheckQuectel();
+
+    uart_puts_EG91("AT+QIDEACT=1\r");
+    Systick_delay(100);
     ReceiveCheckQuectel();
 }
 
@@ -83,7 +108,7 @@ void Init_Transmit_Cloud(void)
     ReceiveCheckQuectel();
 
     uart_puts_EG91("AT+QIACT=1\r");
-    Systick_delay(2500);
+    Systick_delay(1000);
     ReceiveCheckQuectel();
 
     uart_puts_EG91("AT+QIACT?\r");
@@ -156,6 +181,7 @@ void Transmit_2G_EG91(void)
 
 }
 */
+
 /* Startup Function */
 uint8_t EG91_Startup(void)
 {
@@ -208,8 +234,6 @@ void EG_Network_Check(void)
 
     Message_counter();
 
-    Sequence = m_characters;
-
     for (xx = 0; xx < message2; xx++)
     {
 
@@ -225,8 +249,6 @@ void EG_Network_Check(void)
         uart_puts_EG91 (StringToSend);
         Systick_delay(5000);
         ReceiveCheckQuectel();
-
-        //Sequence++;
     }
 }
 

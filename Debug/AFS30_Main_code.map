@@ -1,34 +1,34 @@
 ******************************************************************************
                   TI ARM Linker PC v18.1.1                     
 ******************************************************************************
->> Linked Fri Dec 28 15:45:33 2018
+>> Linked Wed Jan 16 15:14:18 2019
 
 OUTPUT FILE NAME:   <AFS30_Main_code.out>
-ENTRY POINT SYMBOL: "_c_int00_noargs"  address: 000058ed
+ENTRY POINT SYMBOL: "_c_int00_noargs"  address: 00005479
 
 
 MEMORY CONFIGURATION
 
          name            origin    length      used     unused   attr    fill
 ----------------------  --------  ---------  --------  --------  ----  --------
-  MAIN                  00000000   00040000  00005f88  0003a078  R  X
+  MAIN                  00000000   00040000  00005a0c  0003a5f4  R  X
   INFO                  00200000   00004000  00000000  00004000  R  X
-  SRAM_CODE             01000000   00010000  00006937  000096c9  RW X
-  SRAM_DATA             20000000   00010000  00006937  000096c9  RW  
+  SRAM_CODE             01000000   00010000  00007bbc  00008444  RW X
+  SRAM_DATA             20000000   00010000  00007bbc  00008444  RW  
 
 
 SEGMENT ALLOCATION MAP
 
 run origin  load origin   length   init length attrs members
 ----------  ----------- ---------- ----------- ----- -------
-00000000    00000000    00005f90   00005f90    r-x
+00000000    00000000    00005a10   00005a10    r-x
   00000000    00000000    000000e4   000000e4    r-- .intvecs
-  000000e4    000000e4    00005b38   00005b38    r-x .text
-  00005c20    00005c20    000002b4   000002b4    r-- .const
-  00005ed8    00005ed8    000000b8   000000b8    r-- .cinit
-20000000    20000000    00006738   00000000    rw-
-  20000000    20000000    0000667f   00000000    rw- .bss
-  20006680    20006680    000000b8   00000000    rw- .data
+  000000e4    000000e4    0000563c   0000563c    r-x .text
+  00005720    00005720    000002b4   000002b4    r-- .const
+  000059d8    000059d8    00000038   00000038    r-- .cinit
+20000000    20000000    000079bc   00000000    rw-
+  20000000    20000000    00007964   00000000    rw- .bss
+  20007964    20007964    00000058   00000000    rw- .data
 2000fe00    2000fe00    00000200   00000000    rw-
   2000fe00    2000fe00    00000200   00000000    rw- .stack
 
@@ -41,213 +41,194 @@ section   page    origin      length       input sections
 .intvecs   0    00000000    000000e4     
                   00000000    000000e4     startup_msp432p401r_ccs.obj (.intvecs:retain)
 
-.text      0    000000e4    00005b38     
+.text      0    000000e4    0000563c     
                   000000e4    00000a5e     rtsv7M4_T_le_v4SPD16_eabi.lib : _printfi.c.obj (.text:__TI_printfi)
                   00000b42    00000002     startup_msp432p401r_ccs.obj (.text:Default_Handler)
-                  00000b44    000006d0     Main.obj (.text:Check_Buttons)
-                  00001214    000004b8     Main.obj (.text:DataCheck)
-                  000016cc    00000460     rtsv7M4_T_le_v4SPD16_eabi.lib : strtod.c.obj (.text:strtod)
-                  00001b2c    000003dc     Main.obj (.text:ConnectCheckQuectel)
-                  00001f08    00000270     Main.obj (.text:Create_Message)
-                  00002178    00000270     rtsv7M4_T_le_v4SPD16_eabi.lib : _printfi.c.obj (.text:_pconv_a)
-                  000023e8    00000204     Main.obj (.text:QuectelCSQCheck)
-                  000025ec    000001d0     rtsv7M4_T_le_v4SPD16_eabi.lib : _printfi.c.obj (.text:_pconv_g)
-                  000027bc    000001c4     Main.obj (.text:ReceiveCheckQuectel)
-                  00002980    000001b6     rtsv7M4_T_le_v4SPD16_eabi.lib : fd_add_t2.asm.obj (.text)
-                  00002b36    00000002                                   : div0.asm.obj (.text)
-                  00002b38    00000184     Main.obj (.text:send_MyCayenne)
-                  00002cbc    0000017c     Main.obj (.text:Build_message)
-                  00002e38    00000164     Main.obj (.text:ReceiveCheckEMB)
-                  00002f9c    0000015b     Main.obj (.text:Init_Transmit_Cloud)
-                  000030f7    00000001     --HOLE-- [fill = 0]
-                  000030f8    0000014c     Main.obj (.text:EG_Network_Check)
-                  00003244    0000013c     rtsv7M4_T_le_v4SPD16_eabi.lib : _printfi.c.obj (.text:_pconv_e)
-                  00003380    00000136                                   : fd_div_t2.asm.obj (.text)
-                  000034b6    00000002     --HOLE-- [fill = 0]
-                  000034b8    00000134     Main.obj (.text:EMB_Set_AppSKey)
-                  000035ec    00000134     Main.obj (.text:EMB_Set_NwkSKey)
-                  00003720    00000130     Main.obj (.text:QuectelOkCheck)
-                  00003850    00000124     Main.obj (.text:EMB_Physical_Address_set)
-                  00003974    00000120     rtsv7M4_T_le_v4SPD16_eabi.lib : _printfi.c.obj (.text:fcvt)
-                  00003a94    00000118     Main.obj (.text:Disable_ADC)
-                  00003bac    00000114     Main.obj (.text:Init_Buttons)
-                  00003cc0    00000114     Main.obj (.text:PowerupCheckBG96)
-                  00003dd4    00000114     Main.obj (.text:PowerupCheckEG91)
-                  00003ee8    00000110     rtsv7M4_T_le_v4SPD16_eabi.lib : s_scalbn.c.obj (.text:scalbn)
-                  00003ff8    000000fc     Main.obj (.text:Init_CAT_M)
-                  000040f4    000000fc     rtsv7M4_T_le_v4SPD16_eabi.lib : fd_mul_t2.asm.obj (.text)
-                  000041f0    000000ec     Main.obj (.text:Current_handler)
-                  000042dc    000000cb     Main.obj (.text:BG96_setting)
-                  000043a7    00000001     --HOLE-- [fill = 0]
-                  000043a8    000000b1     rtsv7M4_T_le_v4SPD16_eabi.lib : _printfi.c.obj (.text:_ltostr)
-                  00004459    00000003     --HOLE-- [fill = 0]
-                  0000445c    000000a8     Main.obj (.text:EMB_Exchange_Data)
-                  00004504    0000009c     Main.obj (.text:Connect_4G)
-                  000045a0    0000009c     rtsv7M4_T_le_v4SPD16_eabi.lib : memcpy_t2.asm.obj (.text)
-                  0000463c    00000096                                   : ull_div_t2.asm.obj (.text)
-                  000046d2    00000002     --HOLE-- [fill = 0]
-                  000046d4    00000094     Main.obj (.text:InitLoRaWAN)
-                  00004768    00000094     Main.obj (.text:main)
-                  000047fc    00000090     Main.obj (.text:connect_MyCayenne)
-                  0000488c    00000088     Main.obj (.text:Connect_CAT_M)
-                  00004914    00000088     Main.obj (.text:Connect_NB_IOT)
-                  0000499c    00000088     Main.obj (.text:Init_NB_IOT)
-                  00004a24    00000086     rtsv7M4_T_le_v4SPD16_eabi.lib : fd_cmp_t2.asm.obj (.text:__aeabi_cdcmple)
-                  00004aaa    00000086                                   : fd_cmp_t2.asm.obj (.text:__aeabi_cdrcmple)
-                  00004b30    00000084     Main.obj (.text:Init_ADC)
-                  00004bb4    0000007c     Main.obj (.text:EMB_Network_Adres)
-                  00004c30    0000007c     Main.obj (.text:EMB_Network_ID)
-                  00004cac    0000007c     Main.obj (.text:Message_counter)
-                  00004d28    0000007a     rtsv7M4_T_le_v4SPD16_eabi.lib : memset_t2.asm.obj (.text)
-                  00004da2    00000002     --HOLE-- [fill = 0]
-                  00004da4    00000078     system_msp432p401r.obj (.text:SystemInit)
-                  00004e1c    0000006e     rtsv7M4_T_le_v4SPD16_eabi.lib : _printfi.c.obj (.text:_mcpy)
-                  00004e8a    0000006e                                   : fd_tos_t2.asm.obj (.text)
-                  00004ef8    00000068                                   : copy_decompress_lzss.c.obj (.text:decompress:lzss:__TI_decompress_lzss)
-                  00004f60    00000064                                   : s_frexp.c.obj (.text:frexp)
-                  00004fc4    00000060     Main.obj (.text:ADC14_IRQHandler)
-                  00005024    0000005c     Main.obj (.text:BG96_Startup)
-                  00005080    0000005c     Main.obj (.text:EG91_Startup)
-                  000050dc    0000005c     Main.obj (.text:Init_ADC_BG96)
-                  00005138    0000005c     Main.obj (.text:Init_ADC_EG91)
-                  00005194    0000005c     Main.obj (.text:Init_ADC_EMB)
-                  000051f0    0000005c     Main.obj (.text:UART_A0_Init)
-                  0000524c    0000005c     Main.obj (.text:UART_A1_Init)
-                  000052a8    0000005c     Main.obj (.text:UART_A3_Init)
-                  00005304    00000056     rtsv7M4_T_le_v4SPD16_eabi.lib : _printfi.c.obj (.text:_pconv_f)
-                  0000535a    00000002     --HOLE-- [fill = 0]
-                  0000535c    00000054     Main.obj (.text:EMB_Network_Pref)
-                  000053b0    00000054     Main.obj (.text:EMB_Startup)
-                  00005404    00000054     Main.obj (.text:EUSCIA0_IRQHandler)
-                  00005458    00000054     Main.obj (.text:EUSCIA1_IRQHandler)
-                  000054ac    00000054     Main.obj (.text:EUSCIA2_IRQHandler)
-                  00005500    00000054     Main.obj (.text:EUSCIA3_IRQHandler)
-                  00005554    00000054     rtsv7M4_T_le_v4SPD16_eabi.lib : ltoa.c.obj (.text:ltoa)
-                  000055a8    00000052                                   : _printfi.c.obj (.text:_ecpy)
-                  000055fa    00000002     --HOLE-- [fill = 0]
-                  000055fc    0000004c     Main.obj (.text:Init_4G)
-                  00005648    0000004c     rtsv7M4_T_le_v4SPD16_eabi.lib : atoi.c.obj (.text:atoi)
-                  00005694    00000048                                   : fd_toi_t2.asm.obj (.text)
-                  000056dc    00000044     Main.obj (.text:EMB_Network_Start)
-                  00005720    00000044     Main.obj (.text:EMB_Network_Stop)
-                  00005764    00000044     Main.obj (.text:EMB_Reset)
-                  000057a8    00000044     rtsv7M4_T_le_v4SPD16_eabi.lib : autoinit.c.obj (.text:__TI_auto_init_nobinit_nopinit:__TI_auto_init_nobinit_nopinit)
-                  000057ec    00000040                                   : sprintf.c.obj (.text:sprintf)
-                  0000582c    00000040     Main.obj (.text:uart_puts_BG96)
-                  0000586c    00000040     Main.obj (.text:uart_puts_EG91)
-                  000058ac    0000003e     rtsv7M4_T_le_v4SPD16_eabi.lib : _printfi.c.obj (.text:_fcpy)
-                  000058ea    00000002     --HOLE-- [fill = 0]
-                  000058ec    00000038                                   : boot_cortex_m.c.obj (.text:_c_int00_noargs:_c_int00_noargs)
-                  00005924    00000038                                   : fs_tod_t2.asm.obj (.text)
-                  0000595c    00000034     Main.obj (.text:Reset_Index)
-                  00005990    00000033     Main.obj (.text:Transmit_4G)
-                  000059c3    00000001     --HOLE-- [fill = 0]
-                  000059c4    00000033     Main.obj (.text:Transmit_NB_IOT)
-                  000059f7    00000001     --HOLE-- [fill = 0]
-                  000059f8    00000030     Main.obj (.text:Systick_delay)
-                  00005a28    0000002e     rtsv7M4_T_le_v4SPD16_eabi.lib : i_tofd_t2.asm.obj (.text)
-                  00005a56    00000002     --HOLE-- [fill = 0]
-                  00005a58    00000026     Main.obj (.text:close_MyCayenne)
-                  00005a7e    00000002     --HOLE-- [fill = 0]
-                  00005a80    00000024     msp432p4xx_driverlib.lib : cs_MSP432P4XX.obj (.text:CS_setDCOCenteredFrequency)
-                  00005aa4    00000024     Main.obj (.text:Disable_UART)
-                  00005ac8    00000024     msp432p4xx_driverlib.lib : interrupt_MSP432P4XX.obj (.text:Interrupt_setPriority)
-                  00005aec    00000020     Main.obj (.text:SysTick_Handler)
-                  00005b0c    0000001c     rtsv7M4_T_le_v4SPD16_eabi.lib : memccpy.c.obj (.text:memccpy)
-                  00005b28    00000018     Main.obj (.text:MCU_led)
-                  00005b40    00000018     rtsv7M4_T_le_v4SPD16_eabi.lib : sprintf.c.obj (.text:_outs)
-                  00005b58    00000016                                   : strchr.c.obj (.text:strchr)
-                  00005b6e    00000014                                   : s_copysign.c.obj (.text:copysign)
-                  00005b82    00000014                                   : strlen.c.obj (.text:strlen)
-                  00005b96    00000012                                   : atof.c.obj (.text:atof)
-                  00005ba8    00000012                                   : wcslen.c.obj (.text:wcslen)
-                  00005bba    00000010     Main.obj (.text:ConnectLoRaWAN)
-                  00005bca    00000010     Main.obj (.text:TransmitLoRaWAN)
-                  00005bda    0000000e     rtsv7M4_T_le_v4SPD16_eabi.lib : copy_decompress_none.c.obj (.text:decompress:none:__TI_decompress_none)
-                  00005be8    0000000c     startup_msp432p401r_ccs.obj (.text:Reset_Handler)
-                  00005bf4    0000000c     rtsv7M4_T_le_v4SPD16_eabi.lib : copy_zero_init.c.obj (.text:decompress:ZI:__TI_zero_init)
-                  00005c00    0000000a                                   : sprintf.c.obj (.text:_outc)
-                  00005c0a    00000002     --HOLE-- [fill = 0]
-                  00005c0c    00000008                                   : errno.c.obj (.text:__aeabi_errno_addr)
-                  00005c14    00000004                                   : pre_init.c.obj (.text:_system_pre_init)
-                  00005c18    00000004                                   : exit.c.obj (.text:abort:abort)
+                  00000b44    00000460     rtsv7M4_T_le_v4SPD16_eabi.lib : strtod.c.obj (.text:strtod)
+                  00000fa4    000003dc     Main.obj (.text:ConnectCheckQuectel)
+                  00001380    00000270     Main.obj (.text:Create_Message)
+                  000015f0    00000270     rtsv7M4_T_le_v4SPD16_eabi.lib : _printfi.c.obj (.text:_pconv_a)
+                  00001860    00000204     Main.obj (.text:QuectelCSQCheck)
+                  00001a64    000001d0     rtsv7M4_T_le_v4SPD16_eabi.lib : _printfi.c.obj (.text:_pconv_g)
+                  00001c34    000001c4     Main.obj (.text:ReceiveCheckQuectel)
+                  00001df8    000001b6     rtsv7M4_T_le_v4SPD16_eabi.lib : fd_add_t2.asm.obj (.text)
+                  00001fae    00000002                                   : div0.asm.obj (.text)
+                  00001fb0    0000018c     Main.obj (.text:Check_Buttons)
+                  0000213c    0000017c     Main.obj (.text:Build_message)
+                  000022b8    00000164     Main.obj (.text:ReceiveCheckEMB)
+                  0000241c    0000015b     Main.obj (.text:Init_Transmit_Cloud)
+                  00002577    00000001     --HOLE-- [fill = 0]
+                  00002578    0000013c     Main.obj (.text:EG_Network_Check)
+                  000026b4    0000013c     rtsv7M4_T_le_v4SPD16_eabi.lib : _printfi.c.obj (.text:_pconv_e)
+                  000027f0    00000136                                   : fd_div_t2.asm.obj (.text)
+                  00002926    00000002     --HOLE-- [fill = 0]
+                  00002928    00000134     Main.obj (.text:EMB_Set_AppSKey)
+                  00002a5c    00000134     Main.obj (.text:EMB_Set_NwkSKey)
+                  00002b90    00000130     Main.obj (.text:QuectelOkCheck)
+                  00002cc0    00000128     Main.obj (.text:Transmit_4G)
+                  00002de8    00000128     Main.obj (.text:Transmit_CAT_M)
+                  00002f10    00000124     Main.obj (.text:CAT_M)
+                  00003034    00000124     Main.obj (.text:EMB_Physical_Address_set)
+                  00003158    00000120     rtsv7M4_T_le_v4SPD16_eabi.lib : _printfi.c.obj (.text:fcvt)
+                  00003278    0000011c     Main.obj (.text:LoRa)
+                  00003394    0000011c     Main.obj (.text:NB_IoT)
+                  000034b0    00000114     Main.obj (.text:Init_Buttons)
+                  000035c4    00000110     Main.obj (.text:PowerupCheckBG96)
+                  000036d4    00000110     Main.obj (.text:PowerupCheckEG91)
+                  000037e4    00000110     rtsv7M4_T_le_v4SPD16_eabi.lib : s_scalbn.c.obj (.text:scalbn)
+                  000038f4    0000010c     Main.obj (.text:EMB_Exchange_Data)
+                  00003a00    0000010c     Main.obj (.text:LTE_4G)
+                  00003b0c    000000fc     Main.obj (.text:Disable_ADC)
+                  00003c08    000000fc     rtsv7M4_T_le_v4SPD16_eabi.lib : fd_mul_t2.asm.obj (.text)
+                  00003d04    000000f0     Main.obj (.text:main)
+                  00003df4    000000ec     Main.obj (.text:Current_handler)
+                  00003ee0    000000d4     Main.obj (.text:Transmit_NB_IOT)
+                  00003fb4    000000cb     Main.obj (.text:BG96_setting)
+                  0000407f    00000001     --HOLE-- [fill = 0]
+                  00004080    000000c0     Main.obj (.text:Init_CAT_M)
+                  00004140    000000b1     rtsv7M4_T_le_v4SPD16_eabi.lib : _printfi.c.obj (.text:_ltostr)
+                  000041f1    00000003     --HOLE-- [fill = 0]
+                  000041f4    000000ac     Main.obj (.text:Init_NB_IOT)
+                  000042a0    0000009c     Main.obj (.text:Connect_4G)
+                  0000433c    0000009c     rtsv7M4_T_le_v4SPD16_eabi.lib : memcpy_t2.asm.obj (.text)
+                  000043d8    00000096                                   : ull_div_t2.asm.obj (.text)
+                  0000446e    00000002     --HOLE-- [fill = 0]
+                  00004470    00000088     Main.obj (.text:Connect_NB_IOT)
+                  000044f8    00000086     rtsv7M4_T_le_v4SPD16_eabi.lib : fd_cmp_t2.asm.obj (.text:__aeabi_cdcmple)
+                  0000457e    00000086                                   : fd_cmp_t2.asm.obj (.text:__aeabi_cdrcmple)
+                  00004604    00000084     Main.obj (.text:Connect_CAT_M)
+                  00004688    00000084     Main.obj (.text:Init_ADC)
+                  0000470c    00000080     Main.obj (.text:InitLoRaWAN)
+                  0000478c    0000007c     Main.obj (.text:EMB_Network_Adres)
+                  00004808    0000007c     Main.obj (.text:EMB_Network_ID)
+                  00004884    0000007a     rtsv7M4_T_le_v4SPD16_eabi.lib : memset_t2.asm.obj (.text)
+                  000048fe    00000002     --HOLE-- [fill = 0]
+                  00004900    00000078     system_msp432p401r.obj (.text:SystemInit)
+                  00004978    0000006e     rtsv7M4_T_le_v4SPD16_eabi.lib : _printfi.c.obj (.text:_mcpy)
+                  000049e6    0000006e                                   : fd_tos_t2.asm.obj (.text)
+                  00004a54    00000068                                   : copy_decompress_lzss.c.obj (.text:decompress:lzss:__TI_decompress_lzss)
+                  00004abc    00000064                                   : s_frexp.c.obj (.text:frexp)
+                  00004b20    00000060     Main.obj (.text:ADC14_IRQHandler)
+                  00004b80    0000005c     Main.obj (.text:BG96_Startup)
+                  00004bdc    0000005c     Main.obj (.text:EG91_Startup)
+                  00004c38    0000005c     Main.obj (.text:Init_ADC_BG96)
+                  00004c94    0000005c     Main.obj (.text:Init_ADC_EG91)
+                  00004cf0    0000005c     Main.obj (.text:Init_ADC_EMB)
+                  00004d4c    0000005c     Main.obj (.text:UART_A0_Init)
+                  00004da8    0000005c     Main.obj (.text:UART_A1_Init)
+                  00004e04    0000005c     Main.obj (.text:UART_A3_Init)
+                  00004e60    00000056     rtsv7M4_T_le_v4SPD16_eabi.lib : _printfi.c.obj (.text:_pconv_f)
+                  00004eb6    00000002     --HOLE-- [fill = 0]
+                  00004eb8    00000054     Main.obj (.text:EMB_Network_Pref)
+                  00004f0c    00000054     Main.obj (.text:EMB_Startup)
+                  00004f60    00000054     Main.obj (.text:EUSCIA0_IRQHandler)
+                  00004fb4    00000054     Main.obj (.text:EUSCIA1_IRQHandler)
+                  00005008    00000054     Main.obj (.text:EUSCIA2_IRQHandler)
+                  0000505c    00000054     Main.obj (.text:EUSCIA3_IRQHandler)
+                  000050b0    00000054     rtsv7M4_T_le_v4SPD16_eabi.lib : ltoa.c.obj (.text:ltoa)
+                  00005104    00000052                                   : _printfi.c.obj (.text:_ecpy)
+                  00005156    00000002     --HOLE-- [fill = 0]
+                  00005158    0000004c                                   : atoi.c.obj (.text:atoi)
+                  000051a4    00000048                                   : fd_toi_t2.asm.obj (.text)
+                  000051ec    00000044     Main.obj (.text:EMB_Network_Start)
+                  00005230    00000044     Main.obj (.text:EMB_Network_Stop)
+                  00005274    00000044     Main.obj (.text:EMB_Reset)
+                  000052b8    00000044     rtsv7M4_T_le_v4SPD16_eabi.lib : autoinit.c.obj (.text:__TI_auto_init_nobinit_nopinit:__TI_auto_init_nobinit_nopinit)
+                  000052fc    00000040     Main.obj (.text:Init_4G)
+                  0000533c    00000040     rtsv7M4_T_le_v4SPD16_eabi.lib : sprintf.c.obj (.text:sprintf)
+                  0000537c    00000040     Main.obj (.text:uart_puts_BG96)
+                  000053bc    00000040     Main.obj (.text:uart_puts_EG91)
+                  000053fc    0000003e     rtsv7M4_T_le_v4SPD16_eabi.lib : _printfi.c.obj (.text:_fcpy)
+                  0000543a    00000002     --HOLE-- [fill = 0]
+                  0000543c    0000003c     Main.obj (.text:Message_counter)
+                  00005478    00000038     rtsv7M4_T_le_v4SPD16_eabi.lib : boot_cortex_m.c.obj (.text:_c_int00_noargs:_c_int00_noargs)
+                  000054b0    00000038                                   : fs_tod_t2.asm.obj (.text)
+                  000054e8    00000034     Main.obj (.text:Reset_Index)
+                  0000551c    00000030     Main.obj (.text:Systick_delay)
+                  0000554c    0000002e     rtsv7M4_T_le_v4SPD16_eabi.lib : i_tofd_t2.asm.obj (.text)
+                  0000557a    00000002     --HOLE-- [fill = 0]
+                  0000557c    00000024     msp432p4xx_driverlib.lib : cs_MSP432P4XX.obj (.text:CS_setDCOCenteredFrequency)
+                  000055a0    00000024     Main.obj (.text:Disable_UART)
+                  000055c4    00000024     msp432p4xx_driverlib.lib : interrupt_MSP432P4XX.obj (.text:Interrupt_setPriority)
+                  000055e8    00000020     Main.obj (.text:SysTick_Handler)
+                  00005608    0000001c     rtsv7M4_T_le_v4SPD16_eabi.lib : memccpy.c.obj (.text:memccpy)
+                  00005624    00000018     Main.obj (.text:MCU_led)
+                  0000563c    00000018     Main.obj (.text:TransmitLoRaWAN)
+                  00005654    00000018     rtsv7M4_T_le_v4SPD16_eabi.lib : sprintf.c.obj (.text:_outs)
+                  0000566c    00000016                                   : strchr.c.obj (.text:strchr)
+                  00005682    00000014                                   : s_copysign.c.obj (.text:copysign)
+                  00005696    00000014                                   : strlen.c.obj (.text:strlen)
+                  000056aa    00000012                                   : atof.c.obj (.text:atof)
+                  000056bc    00000012                                   : wcslen.c.obj (.text:wcslen)
+                  000056ce    00000010     Main.obj (.text:ConnectLoRaWAN)
+                  000056de    0000000e     rtsv7M4_T_le_v4SPD16_eabi.lib : copy_decompress_none.c.obj (.text:decompress:none:__TI_decompress_none)
+                  000056ec    0000000c     startup_msp432p401r_ccs.obj (.text:Reset_Handler)
+                  000056f8    0000000c     rtsv7M4_T_le_v4SPD16_eabi.lib : copy_zero_init.c.obj (.text:decompress:ZI:__TI_zero_init)
+                  00005704    0000000a                                   : sprintf.c.obj (.text:_outc)
+                  0000570e    00000002     --HOLE-- [fill = 0]
+                  00005710    00000008                                   : errno.c.obj (.text:__aeabi_errno_addr)
+                  00005718    00000004                                   : pre_init.c.obj (.text:_system_pre_init)
+                  0000571c    00000004                                   : exit.c.obj (.text:abort:abort)
 
-.const     0    00005c20    000002b4     
-                  00005c20    00000101     rtsv7M4_T_le_v4SPD16_eabi.lib : ctype.c.obj (.const:.string:_ctypes_)
-                  00005d21    00000007     --HOLE-- [fill = 0]
-                  00005d28    000000c8                                   : strtod.c.obj (.const:$O1$$)
-                  00005df0    00000050     msp432p4xx_driverlib.lib : interrupt_MSP432P4XX.obj (.const:g_pulRegs)
-                  00005e40    00000024     Main.obj (.const:BG96_UART_Config)
-                  00005e64    00000024     Main.obj (.const:EG91_UART_Config)
-                  00005e88    00000024     Main.obj (.const:EMB_UART_Config)
-                  00005eac    00000018     Main.obj (.const:upModeConfig)
-                  00005ec4    00000010     Main.obj (.const:compareConfig)
+.const     0    00005720    000002b4     
+                  00005720    00000101     rtsv7M4_T_le_v4SPD16_eabi.lib : ctype.c.obj (.const:.string:_ctypes_)
+                  00005821    00000007     --HOLE-- [fill = 0]
+                  00005828    000000c8                                   : strtod.c.obj (.const:$O1$$)
+                  000058f0    00000050     msp432p4xx_driverlib.lib : interrupt_MSP432P4XX.obj (.const:g_pulRegs)
+                  00005940    00000024     Main.obj (.const:BG96_UART_Config)
+                  00005964    00000024     Main.obj (.const:EG91_UART_Config)
+                  00005988    00000024     Main.obj (.const:EMB_UART_Config)
+                  000059ac    00000018     Main.obj (.const:upModeConfig)
+                  000059c4    00000010     Main.obj (.const:compareConfig)
 
-.cinit     0    00005ed8    000000b8     
-                  00005ed8    0000008e     (.cinit..data.load) [load image, compression = lzss]
-                  00005f66    00000002     --HOLE-- [fill = 0]
-                  00005f68    0000000c     (__TI_handler_table)
-                  00005f74    00000004     --HOLE-- [fill = 0]
-                  00005f78    00000008     (.cinit..bss.load) [load image, compression = zero_init]
-                  00005f80    00000010     (__TI_cinit_table)
+.cinit     0    000059d8    00000038     
+                  000059d8    00000013     (.cinit..data.load) [load image, compression = lzss]
+                  000059eb    00000001     --HOLE-- [fill = 0]
+                  000059ec    0000000c     (__TI_handler_table)
+                  000059f8    00000008     (.cinit..bss.load) [load image, compression = zero_init]
+                  00005a00    00000010     (__TI_cinit_table)
 
 .init_array 
 *          0    00000000    00000000     UNINITIALIZED
 
 .binit     0    00000000    00000000     
 
-.bss       0    20000000    0000667f     UNINITIALIZED
-                  20000000    00001388     (.common:StringToSend)
-                  20001388    00000fa0     Main.obj (.bss:Readings)
-                  20002328    00000c80     Main.obj (.bss:Samples)
-                  20002fa8    00000c80     (.common:MovAvgConnected)
-                  20003c28    00000c80     (.common:MovAvgIdle)
-                  200048a8    00000c80     (.common:MovAvgInitialising)
-                  20005528    00000c80     (.common:MovAvgTransmission)
-                  200061a8    000000c8     (.common:RXBuffer)
-                  20006270    00000098     (.common:MQTLogin)
-                  20006308    00000098     (.common:MQTPUB)
-                  200063a0    00000098     (.common:MQTSEND)
-                  20006438    00000098     (.common:MQTSUB)
-                  200064d0    00000098     (.common:StringPost)
-                  20006568    00000098     (.common:StringURL)
-                  20006600    00000014     (.common:constant)
-                  20006614    00000008     (.common:tempchar)
-                  2000661c    00000004     (.common:Cell)
-                  20006620    00000004     (.common:GPS_Lat)
-                  20006624    00000004     (.common:GPS_Lon)
-                  20006628    00000004     (.common:LAC)
-                  2000662c    00000004     (.common:MCC)
-                  20006630    00000004     (.common:MNC)
-                  20006634    00000004     (.common:Network)
-                  20006638    00000004     (.common:PostLength)
-                  2000663c    00000004     (.common:Sequence)
-                  20006640    00000004     (.common:SignalStrength)
-                  20006644    00000004     (.common:Size)
-                  20006648    00000004     (.common:bcl)
-                  2000664c    00000004     (.common:m_characters)
-                  20006650    00000004     (.common:pa)
-                  20006654    00000004     (.common:pmic)
-                  20006658    00000004     (.common:r)
-                  2000665c    00000004     (.common:rsrp)
-                  20006660    00000004     (.common:rsrq)
-                  20006664    00000004     (.common:rssi)
-                  20006668    00000004     (.common:s)
-                  2000666c    00000004     (.common:sinr)
-                  20006670    00000004     (.common:vbat)
-                  20006674    00000004     (.common:xo)
-                  20006678    00000004     (.common:xx)
-                  2000667c    00000001     (.common:GNSS_BG96)
-                  2000667d    00000001     (.common:j)
-                  2000667e    00000001     (.common:startup)
+.bss       0    20000000    00007964     UNINITIALIZED
+                  20000000    00002710     (.common:StringToSend)
+                  20002710    00000fa0     Main.obj (.bss:Readings)
+                  200036b0    00000c80     Main.obj (.bss:Samples)
+                  20004330    00000c80     (.common:MovAvgConnected)
+                  20004fb0    00000c80     (.common:MovAvgIdle)
+                  20005c30    00000c80     (.common:MovAvgInitialising)
+                  200068b0    00000c80     (.common:MovAvgTransmission)
+                  20007530    000001f4     (.common:TransmitSize)
+                  20007724    000000c8     (.common:RXBuffer)
+                  200077ec    00000098     (.common:StringPost)
+                  20007884    00000098     (.common:StringURL)
+                  2000791c    00000008     (.common:tempchar)
+                  20007924    00000004     (.common:Cell)
+                  20007928    00000004     (.common:GPS_Lat)
+                  2000792c    00000004     (.common:GPS_Lon)
+                  20007930    00000004     (.common:LAC)
+                  20007934    00000004     (.common:MCC)
+                  20007938    00000004     (.common:MNC)
+                  2000793c    00000004     (.common:Network)
+                  20007940    00000004     (.common:PostLength)
+                  20007944    00000004     (.common:Sequence)
+                  20007948    00000004     (.common:SignalStrength)
+                  2000794c    00000004     (.common:Size)
+                  20007950    00000004     (.common:m_characters)
+                  20007954    00000004     (.common:r)
+                  20007958    00000004     (.common:s)
+                  2000795c    00000004     (.common:xx)
+                  20007960    00000001     (.common:EMB_length)
+                  20007961    00000001     (.common:GNSS_BG96)
+                  20007962    00000001     (.common:j)
+                  20007963    00000001     (.common:startup)
 
-.data      0    20006680    000000b8     UNINITIALIZED
-                  20006680    00000040     Main.obj (.data)
-                  200066c0    00000029     Main.obj (.data:Password)
-                  200066e9    00000025     Main.obj (.data:ClientID)
-                  2000670e    00000025     Main.obj (.data:Username)
-                  20006733    00000001     --HOLE--
-                  20006734    00000004     rtsv7M4_T_le_v4SPD16_eabi.lib : errno.c.obj (.data)
+.data      0    20007964    00000058     UNINITIALIZED
+                  20007964    00000054     Main.obj (.data)
+                  200079b8    00000004     rtsv7M4_T_le_v4SPD16_eabi.lib : errno.c.obj (.data)
 
 .stack     0    2000fe00    00000200     UNINITIALIZED
                   2000fe00    00000004     rtsv7M4_T_le_v4SPD16_eabi.lib : boot_cortex_m.c.obj (.stack)
@@ -258,10 +239,10 @@ MODULE SUMMARY
        Module                        code    ro data   rw data
        ------                        ----    -------   -------
     .\
-       Main.obj                      14130   148       52836  
+       Main.obj                      12858   148       62320  
        system_msp432p401r.obj        120     0         0      
     +--+-----------------------------+-------+---------+---------+
-       Total:                        14250   148       52836  
+       Total:                        12978   148       62320  
                                                               
     .\ccs\
        startup_msp432p401r_ccs.obj   14      228       0      
@@ -313,21 +294,21 @@ MODULE SUMMARY
        Total:                        8991    457       8      
                                                               
        Stack:                        0       0         1024   
-       Linker Generated:             0       178       0      
+       Linker Generated:             0       55        0      
     +--+-----------------------------+-------+---------+---------+
-       Grand Total:                  23327   1091      53868  
+       Grand Total:                  22055   968       63352  
 
 
 LINKER GENERATED COPY TABLES
 
-__TI_cinit_table @ 00005f80 records: 2, size/record: 8, table size: 16
-	.data: load addr=00005ed8, load size=0000008e bytes, run addr=20006680, run size=000000b8 bytes, compression=lzss
-	.bss: load addr=00005f78, load size=00000008 bytes, run addr=20000000, run size=0000667f bytes, compression=zero_init
+__TI_cinit_table @ 00005a00 records: 2, size/record: 8, table size: 16
+	.data: load addr=000059d8, load size=00000013 bytes, run addr=20007964, run size=00000058 bytes, compression=lzss
+	.bss: load addr=000059f8, load size=00000008 bytes, run addr=20000000, run size=00007964 bytes, compression=zero_init
 
 
 LINKER GENERATED HANDLER TABLE
 
-__TI_handler_table @ 00005f68 records: 3, size/record: 4, table size: 12
+__TI_handler_table @ 000059ec records: 3, size/record: 4, table size: 12
 	index: 0, handler: __TI_decompress_lzss
 	index: 1, handler: __TI_decompress_none
 	index: 2, handler: __TI_zero_init
@@ -337,110 +318,110 @@ GLOBAL SYMBOLS: SORTED ALPHABETICALLY BY Name
 
 address   name                          
 -------   ----                          
-00004fc5  ADC14_IRQHandler              
-00004fc5  ADC14_IRQHandler              
+00004b21  ADC14_IRQHandler              
+00004b21  ADC14_IRQHandler              
 00000b43  AES256_IRQHandler             
-200066aa  AT_Error                      
-00005025  BG96_Startup                  
-00005e40  BG96_UART_Config              
-000042dd  BG96_setting                  
-00002cbd  Build_message                 
+200079a2  AT_Error                      
+00004b81  BG96_Startup                  
+00005940  BG96_UART_Config              
+00003fb5  BG96_setting                  
+0000213d  Build_message                 
 00000b43  BusFault_Handler              
-00005c19  C$$EXIT                       
+0000571d  C$$EXIT                       
+00002f11  CAT_M                         
 00000b43  COMP_E0_IRQHandler            
 00000b43  COMP_E1_IRQHandler            
+200079b1  CRC                           
 00000b43  CS_IRQHandler                 
-00005a81  CS_setDCOCenteredFrequency    
-2000661c  Cell                          
-00000b45  Check_Buttons                 
-200066a0  Checksum                      
-200066a2  Checksumfield                 
-200066e9  ClientID                      
-00001b2d  ConnectCheckQuectel           
-00005bbb  ConnectLoRaWAN                
-00004505  Connect_4G                    
-0000488d  Connect_CAT_M                 
-00004915  Connect_NB_IOT                
-00001f09  Create_Message                
-000041f1  Current_handler               
+0000557d  CS_setDCOCenteredFrequency    
+20007924  Cell                          
+00001fb1  Check_Buttons                 
+20007998  Checksum                      
+2000799a  Checksumfield                 
+00000fa5  ConnectCheckQuectel           
+000056cf  ConnectLoRaWAN                
+000042a1  Connect_4G                    
+00004605  Connect_CAT_M                 
+00004471  Connect_NB_IOT                
+00001381  Create_Message                
+00003df5  Current_handler               
 00000b43  DMA_ERR_IRQHandler            
 00000b43  DMA_INT0_IRQHandler           
 00000b43  DMA_INT1_IRQHandler           
 00000b43  DMA_INT2_IRQHandler           
 00000b43  DMA_INT3_IRQHandler           
-00001215  DataCheck                     
 00000b43  DebugMon_Handler              
 00000b43  Default_Handler               
-00003a95  Disable_ADC                   
-00005aa5  Disable_UART                  
-00005081  EG91_Startup                  
-00005e64  EG91_UART_Config              
-000030f9  EG_Network_Check              
-0000445d  EMB_Exchange_Data             
-00004bb5  EMB_Network_Adres             
-00004c31  EMB_Network_ID                
-0000535d  EMB_Network_Pref              
-000056dd  EMB_Network_Start             
-00005721  EMB_Network_Stop              
-00003851  EMB_Physical_Address_set      
-00005765  EMB_Reset                     
-000034b9  EMB_Set_AppSKey               
-000035ed  EMB_Set_NwkSKey               
-000053b1  EMB_Startup                   
-00005e88  EMB_UART_Config               
-00005405  EUSCIA0_IRQHandler            
-00005405  EUSCIA0_IRQHandler            
-00005459  EUSCIA1_IRQHandler            
-00005459  EUSCIA1_IRQHandler            
-000054ad  EUSCIA2_IRQHandler            
-000054ad  EUSCIA2_IRQHandler            
-00005501  EUSCIA3_IRQHandler            
-00005501  EUSCIA3_IRQHandler            
+00003b0d  Disable_ADC                   
+000055a1  Disable_UART                  
+00004bdd  EG91_Startup                  
+00005964  EG91_UART_Config              
+00002579  EG_Network_Check              
+000038f5  EMB_Exchange_Data             
+0000478d  EMB_Network_Adres             
+00004809  EMB_Network_ID                
+00004eb9  EMB_Network_Pref              
+000051ed  EMB_Network_Start             
+00005231  EMB_Network_Stop              
+00003035  EMB_Physical_Address_set      
+00005275  EMB_Reset                     
+00002929  EMB_Set_AppSKey               
+00002a5d  EMB_Set_NwkSKey               
+00004f0d  EMB_Startup                   
+00005988  EMB_UART_Config               
+20007960  EMB_length                    
+00004f61  EUSCIA0_IRQHandler            
+00004f61  EUSCIA0_IRQHandler            
+00004fb5  EUSCIA1_IRQHandler            
+00004fb5  EUSCIA1_IRQHandler            
+00005009  EUSCIA2_IRQHandler            
+00005009  EUSCIA2_IRQHandler            
+0000505d  EUSCIA3_IRQHandler            
+0000505d  EUSCIA3_IRQHandler            
 00000b43  EUSCIB0_IRQHandler            
 00000b43  EUSCIB1_IRQHandler            
 00000b43  EUSCIB2_IRQHandler            
 00000b43  EUSCIB3_IRQHandler            
 00000b43  FLCTL_IRQHandler              
 00000b43  FPU_IRQHandler                
-2000667c  GNSS_BG96                     
-200066b4  GPS_Count                     
-20006620  GPS_Lat                       
-20006624  GPS_Lon                       
+20007961  GNSS_BG96                     
+200079ac  GPS_Count                     
+20007928  GPS_Lat                       
+2000792c  GPS_Lon                       
 00000b43  HardFault_Handler             
-200066b0  IndexCounter                  
-000046d5  InitLoRaWAN                   
-000055fd  Init_4G                       
-00004b31  Init_ADC                      
-000050dd  Init_ADC_BG96                 
-00005139  Init_ADC_EG91                 
-00005195  Init_ADC_EMB                  
-00003bad  Init_Buttons                  
-00003ff9  Init_CAT_M                    
-0000499d  Init_NB_IOT                   
-00002f9d  Init_Transmit_Cloud           
-00005ac9  Interrupt_setPriority         
-20006628  LAC                           
-2000662c  MCC                           
-00005b29  MCU_led                       
-20006630  MNC                           
-20006270  MQTLogin                      
-20006308  MQTPUB                        
-200063a0  MQTSEND                       
-20006438  MQTSUB                        
+200079a8  IndexCounter                  
+0000470d  InitLoRaWAN                   
+000052fd  Init_4G                       
+00004689  Init_ADC                      
+00004c39  Init_ADC_BG96                 
+00004c95  Init_ADC_EG91                 
+00004cf1  Init_ADC_EMB                  
+000034b1  Init_Buttons                  
+00004081  Init_CAT_M                    
+000041f5  Init_NB_IOT                   
+0000241d  Init_Transmit_Cloud           
+000055c5  Interrupt_setPriority         
+20007930  LAC                           
+00003a01  LTE_4G                        
+00003279  LoRa                          
+20007934  MCC                           
+00005625  MCU_led                       
+20007938  MNC                           
 00000b43  MemManage_Handler             
-00004cad  Message_counter               
-200066a1  Messagefield                  
-20006680  Module_status                 
-20002fa8  MovAvgConnected               
-20006690  MovAvgConnectedIndex          
-20003c28  MovAvgIdle                    
-20006688  MovAvgIdleIndex               
-200048a8  MovAvgInitialising            
-2000668c  MovAvgInitialisingIndex       
-20005528  MovAvgTransmission            
-20006694  MovAvgTransmissionIndex       
+0000543d  Message_counter               
+20007999  Messagefield                  
+20007964  Module_status                 
+20004330  MovAvgConnected               
+20007988  MovAvgConnectedIndex          
+20004fb0  MovAvgIdle                    
+20007980  MovAvgIdleIndex               
+20005c30  MovAvgInitialising            
+20007984  MovAvgInitialisingIndex       
+200068b0  MovAvgTransmission            
+2000798c  MovAvgTransmissionIndex       
+00003395  NB_IoT                        
 00000b43  NMI_Handler                   
-20006634  Network                       
+2000793c  Network                       
 00000b43  PCM_IRQHandler                
 00000b43  PORT1_IRQHandler              
 00000b43  PORT2_IRQHandler              
@@ -449,32 +430,31 @@ address   name
 00000b43  PORT5_IRQHandler              
 00000b43  PORT6_IRQHandler              
 00000b43  PSS_IRQHandler                
-200066c0  Password                      
 00000b43  PendSV_Handler                
-20006638  PostLength                    
-00003cc1  PowerupCheckBG96              
-00003dd5  PowerupCheckEG91              
-200066a4  Powerup_done                  
-000023e9  QuectelCSQCheck               
-00003721  QuectelOkCheck                
+20007940  PostLength                    
+000035c5  PowerupCheckBG96              
+000036d5  PowerupCheckEG91              
+2000799c  Powerup_done                  
+00001861  QuectelCSQCheck               
+00002b91  QuectelOkCheck                
 00000b43  RTC_C_IRQHandler              
-200061a8  RXBuffer                      
-00002e39  ReceiveCheckEMB               
-000027bd  ReceiveCheckQuectel           
-200066a3  Receive_done                  
-00005be9  Reset_Handler                 
-0000595d  Reset_Index                   
+20007724  RXBuffer                      
+000022b9  ReceiveCheckEMB               
+00001c35  ReceiveCheckQuectel           
+2000799b  Receive_done                  
+000056ed  Reset_Handler                 
+000054e9  Reset_Index                   
 00000b43  SVC_Handler                   
-2000663c  Sequence                      
-20006640  SignalStrength                
-20006644  Size                          
-200064d0  StringPost                    
+20007944  Sequence                      
+20007948  SignalStrength                
+2000794c  Size                          
+200077ec  StringPost                    
 20000000  StringToSend                  
-20006568  StringURL                     
-00005aed  SysTick_Handler               
-00005aed  SysTick_Handler               
-00004da5  SystemInit                    
-000059f9  Systick_delay                 
+20007884  StringURL                     
+000055e9  SysTick_Handler               
+000055e9  SysTick_Handler               
+00004901  SystemInit                    
+0000551d  Systick_delay                 
 00000b43  T32_INT1_IRQHandler           
 00000b43  T32_INT2_IRQHandler           
 00000b43  T32_INTC_IRQHandler           
@@ -486,121 +466,114 @@ address   name
 00000b43  TA2_N_IRQHandler              
 00000b43  TA3_0_IRQHandler              
 00000b43  TA3_N_IRQHandler              
-200066bc  Ticks                         
-00005bcb  TransmitLoRaWAN               
-00005991  Transmit_4G                   
-000059c5  Transmit_NB_IOT               
-000051f1  UART_A0_Init                  
-0000524d  UART_A1_Init                  
-000052a9  UART_A3_Init                  
+200079b4  Ticks                         
+0000563d  TransmitLoRaWAN               
+20007530  TransmitSize                  
+00002cc1  Transmit_4G                   
+00002de9  Transmit_CAT_M                
+00003ee1  Transmit_NB_IOT               
+00004d4d  UART_A0_Init                  
+00004da9  UART_A1_Init                  
+00004e05  UART_A3_Init                  
 00000b43  UsageFault_Handler            
-2000670e  Username                      
 4000480c  WDTCTL_SYM                    
 00000b43  WDT_A_IRQHandler              
 20010000  __STACK_END                   
 00000200  __STACK_SIZE                  
-00005f80  __TI_CINIT_Base               
-00005f90  __TI_CINIT_Limit              
-00005f68  __TI_Handler_Table_Base       
-00005f74  __TI_Handler_Table_Limit      
-000057a9  __TI_auto_init_nobinit_nopinit
-00004ef9  __TI_decompress_lzss          
-00005bdb  __TI_decompress_none          
+00005a00  __TI_CINIT_Base               
+00005a10  __TI_CINIT_Limit              
+000059ec  __TI_Handler_Table_Base       
+000059f8  __TI_Handler_Table_Limit      
+000052b9  __TI_auto_init_nobinit_nopinit
+00004a55  __TI_decompress_lzss          
+000056df  __TI_decompress_none          
 ffffffff  __TI_pprof_out_hndl           
 000000e5  __TI_printfi                  
 ffffffff  __TI_prof_data_size           
 ffffffff  __TI_prof_data_start          
 00000000  __TI_static_base__            
-00005bf5  __TI_zero_init                
-00004a25  __aeabi_cdcmpeq               
-00004a25  __aeabi_cdcmple               
-00004aab  __aeabi_cdrcmple              
-00004e8b  __aeabi_d2f                   
-00005695  __aeabi_d2iz                  
-0000298b  __aeabi_dadd                  
-00003381  __aeabi_ddiv                  
-000040f5  __aeabi_dmul                  
-00002981  __aeabi_dsub                  
-00005c0d  __aeabi_errno_addr            
-00005925  __aeabi_f2d                   
-00005a29  __aeabi_i2d                   
-00002b37  __aeabi_idiv0                 
-00002b37  __aeabi_ldiv0                 
-00004d29  __aeabi_memclr                
-00004d29  __aeabi_memclr4               
-00004d29  __aeabi_memclr8               
-000045a1  __aeabi_memcpy                
-000045a1  __aeabi_memcpy4               
-000045a1  __aeabi_memcpy8               
-00004d2b  __aeabi_memset                
-00004d2b  __aeabi_memset4               
-00004d2b  __aeabi_memset8               
-0000463d  __aeabi_uldivmod              
+000056f9  __TI_zero_init                
+000044f9  __aeabi_cdcmpeq               
+000044f9  __aeabi_cdcmple               
+0000457f  __aeabi_cdrcmple              
+000049e7  __aeabi_d2f                   
+000051a5  __aeabi_d2iz                  
+00001e03  __aeabi_dadd                  
+000027f1  __aeabi_ddiv                  
+00003c09  __aeabi_dmul                  
+00001df9  __aeabi_dsub                  
+00005711  __aeabi_errno_addr            
+000054b1  __aeabi_f2d                   
+0000554d  __aeabi_i2d                   
+00001faf  __aeabi_idiv0                 
+00001faf  __aeabi_ldiv0                 
+00004885  __aeabi_memclr                
+00004885  __aeabi_memclr4               
+00004885  __aeabi_memclr8               
+0000433d  __aeabi_memcpy                
+0000433d  __aeabi_memcpy4               
+0000433d  __aeabi_memcpy8               
+00004887  __aeabi_memset                
+00004887  __aeabi_memset4               
+00004887  __aeabi_memset8               
+000043d9  __aeabi_uldivmod              
 ffffffff  __binit__                     
 ffffffff  __c_args__                    
 UNDEFED   __mpu_init                    
 2000fe00  __stack                       
-000058ed  _c_int00_noargs               
-00005c20  _ctypes_                      
+00005479  _c_int00_noargs               
+00005720  _ctypes_                      
 UNDEFED   _system_post_cinit            
-00005c15  _system_pre_init              
-00005c19  abort                         
-00005b97  atof                          
-00005649  atoi                          
-20006648  bcl                           
+00005719  _system_pre_init              
+0000571d  abort                         
+000056ab  atof                          
+00005159  atoi                          
 ffffffff  binit                         
-2000669c  cc                            
-00005a59  close_MyCayenne               
-00005ec4  compareConfig                 
-000047fd  connect_MyCayenne             
-20006600  constant                      
-00005b6f  copysign                      
-00005b6f  copysignl                     
-200066a9  counter                       
-20006734  errno                         
-00004f61  frexp                         
-00004f61  frexpl                        
-200066a5  i                             
-200066a8  ii                            
+20007994  cc                            
+000059c4  compareConfig                 
+00005683  copysign                      
+00005683  copysignl                     
+200079a1  counter                       
+200079b8  errno                         
+00004abd  frexp                         
+00004abd  frexpl                        
+2000799d  i                             
+200079a0  ii                            
 00000000  interruptVectors              
-2000667d  j                             
-00003ee9  ldexp                         
-00003ee9  ldexpl                        
-00005555  ltoa                          
-2000664c  m_characters                  
-00004769  main                          
-00005b0d  memccpy                       
-000045a1  memcpy                        
-00004d31  memset                        
-200066ac  message2                      
-20006650  pa                            
-20006654  pmic                          
-20006658  r                             
-2000665c  rsrp                          
-20006660  rsrq                          
-20006664  rssi                          
-20006668  s                             
-00003ee9  scalbn                        
-00003ee9  scalbnl                       
-00002b39  send_MyCayenne                
-2000666c  sinr                          
-000057ed  sprintf                       
-2000667e  startup                       
-200066b8  status                        
-00005b59  strchr                        
-00005b83  strlen                        
-000016cd  strtod                        
-000016cd  strtold                       
-20006614  tempchar                      
-0000582d  uart_puts_BG96                
-0000586d  uart_puts_EG91                
-00005eac  upModeConfig                  
-20006670  vbat                          
-00005ba9  wcslen                        
-200066a6  x                             
-20006674  xo                            
-20006678  xx                            
-200066a7  y                             
+20007962  j                             
+000037e5  ldexp                         
+000037e5  ldexpl                        
+000050b1  ltoa                          
+20007950  m_characters                  
+00003d05  main                          
+00005609  memccpy                       
+0000433d  memcpy                        
+0000488d  memset                        
+200079a4  message2                      
+20007954  r                             
+20007958  s                             
+000037e5  scalbn                        
+000037e5  scalbnl                       
+20007978  select                        
+20007974  select4                       
+20007970  selectC                       
+20007968  selectL                       
+2000796c  selectN                       
+0000533d  sprintf                       
+20007963  startup                       
+200079b0  status                        
+0000566d  strchr                        
+00005697  strlen                        
+00000b45  strtod                        
+00000b45  strtold                       
+2000791c  tempchar                      
+0000537d  uart_puts_BG96                
+000053bd  uart_puts_EG91                
+000059ac  upModeConfig                  
+000056bd  wcslen                        
+2000799e  x                             
+2000795c  xx                            
+2000799f  y                             
 
 
 GLOBAL SYMBOLS: SORTED BY Symbol Address 
@@ -656,210 +629,202 @@ address   name
 00000b43  TA3_N_IRQHandler              
 00000b43  UsageFault_Handler            
 00000b43  WDT_A_IRQHandler              
-00000b45  Check_Buttons                 
-00001215  DataCheck                     
-000016cd  strtod                        
-000016cd  strtold                       
-00001b2d  ConnectCheckQuectel           
-00001f09  Create_Message                
-000023e9  QuectelCSQCheck               
-000027bd  ReceiveCheckQuectel           
-00002981  __aeabi_dsub                  
-0000298b  __aeabi_dadd                  
-00002b37  __aeabi_idiv0                 
-00002b37  __aeabi_ldiv0                 
-00002b39  send_MyCayenne                
-00002cbd  Build_message                 
-00002e39  ReceiveCheckEMB               
-00002f9d  Init_Transmit_Cloud           
-000030f9  EG_Network_Check              
-00003381  __aeabi_ddiv                  
-000034b9  EMB_Set_AppSKey               
-000035ed  EMB_Set_NwkSKey               
-00003721  QuectelOkCheck                
-00003851  EMB_Physical_Address_set      
-00003a95  Disable_ADC                   
-00003bad  Init_Buttons                  
-00003cc1  PowerupCheckBG96              
-00003dd5  PowerupCheckEG91              
-00003ee9  ldexp                         
-00003ee9  ldexpl                        
-00003ee9  scalbn                        
-00003ee9  scalbnl                       
-00003ff9  Init_CAT_M                    
-000040f5  __aeabi_dmul                  
-000041f1  Current_handler               
-000042dd  BG96_setting                  
-0000445d  EMB_Exchange_Data             
-00004505  Connect_4G                    
-000045a1  __aeabi_memcpy                
-000045a1  __aeabi_memcpy4               
-000045a1  __aeabi_memcpy8               
-000045a1  memcpy                        
-0000463d  __aeabi_uldivmod              
-000046d5  InitLoRaWAN                   
-00004769  main                          
-000047fd  connect_MyCayenne             
-0000488d  Connect_CAT_M                 
-00004915  Connect_NB_IOT                
-0000499d  Init_NB_IOT                   
-00004a25  __aeabi_cdcmpeq               
-00004a25  __aeabi_cdcmple               
-00004aab  __aeabi_cdrcmple              
-00004b31  Init_ADC                      
-00004bb5  EMB_Network_Adres             
-00004c31  EMB_Network_ID                
-00004cad  Message_counter               
-00004d29  __aeabi_memclr                
-00004d29  __aeabi_memclr4               
-00004d29  __aeabi_memclr8               
-00004d2b  __aeabi_memset                
-00004d2b  __aeabi_memset4               
-00004d2b  __aeabi_memset8               
-00004d31  memset                        
-00004da5  SystemInit                    
-00004e8b  __aeabi_d2f                   
-00004ef9  __TI_decompress_lzss          
-00004f61  frexp                         
-00004f61  frexpl                        
-00004fc5  ADC14_IRQHandler              
-00004fc5  ADC14_IRQHandler              
-00005025  BG96_Startup                  
-00005081  EG91_Startup                  
-000050dd  Init_ADC_BG96                 
-00005139  Init_ADC_EG91                 
-00005195  Init_ADC_EMB                  
-000051f1  UART_A0_Init                  
-0000524d  UART_A1_Init                  
-000052a9  UART_A3_Init                  
-0000535d  EMB_Network_Pref              
-000053b1  EMB_Startup                   
-00005405  EUSCIA0_IRQHandler            
-00005405  EUSCIA0_IRQHandler            
-00005459  EUSCIA1_IRQHandler            
-00005459  EUSCIA1_IRQHandler            
-000054ad  EUSCIA2_IRQHandler            
-000054ad  EUSCIA2_IRQHandler            
-00005501  EUSCIA3_IRQHandler            
-00005501  EUSCIA3_IRQHandler            
-00005555  ltoa                          
-000055fd  Init_4G                       
-00005649  atoi                          
-00005695  __aeabi_d2iz                  
-000056dd  EMB_Network_Start             
-00005721  EMB_Network_Stop              
-00005765  EMB_Reset                     
-000057a9  __TI_auto_init_nobinit_nopinit
-000057ed  sprintf                       
-0000582d  uart_puts_BG96                
-0000586d  uart_puts_EG91                
-000058ed  _c_int00_noargs               
-00005925  __aeabi_f2d                   
-0000595d  Reset_Index                   
-00005991  Transmit_4G                   
-000059c5  Transmit_NB_IOT               
-000059f9  Systick_delay                 
-00005a29  __aeabi_i2d                   
-00005a59  close_MyCayenne               
-00005a81  CS_setDCOCenteredFrequency    
-00005aa5  Disable_UART                  
-00005ac9  Interrupt_setPriority         
-00005aed  SysTick_Handler               
-00005aed  SysTick_Handler               
-00005b0d  memccpy                       
-00005b29  MCU_led                       
-00005b59  strchr                        
-00005b6f  copysign                      
-00005b6f  copysignl                     
-00005b83  strlen                        
-00005b97  atof                          
-00005ba9  wcslen                        
-00005bbb  ConnectLoRaWAN                
-00005bcb  TransmitLoRaWAN               
-00005bdb  __TI_decompress_none          
-00005be9  Reset_Handler                 
-00005bf5  __TI_zero_init                
-00005c0d  __aeabi_errno_addr            
-00005c15  _system_pre_init              
-00005c19  C$$EXIT                       
-00005c19  abort                         
-00005c20  _ctypes_                      
-00005e40  BG96_UART_Config              
-00005e64  EG91_UART_Config              
-00005e88  EMB_UART_Config               
-00005eac  upModeConfig                  
-00005ec4  compareConfig                 
-00005f68  __TI_Handler_Table_Base       
-00005f74  __TI_Handler_Table_Limit      
-00005f80  __TI_CINIT_Base               
-00005f90  __TI_CINIT_Limit              
+00000b45  strtod                        
+00000b45  strtold                       
+00000fa5  ConnectCheckQuectel           
+00001381  Create_Message                
+00001861  QuectelCSQCheck               
+00001c35  ReceiveCheckQuectel           
+00001df9  __aeabi_dsub                  
+00001e03  __aeabi_dadd                  
+00001faf  __aeabi_idiv0                 
+00001faf  __aeabi_ldiv0                 
+00001fb1  Check_Buttons                 
+0000213d  Build_message                 
+000022b9  ReceiveCheckEMB               
+0000241d  Init_Transmit_Cloud           
+00002579  EG_Network_Check              
+000027f1  __aeabi_ddiv                  
+00002929  EMB_Set_AppSKey               
+00002a5d  EMB_Set_NwkSKey               
+00002b91  QuectelOkCheck                
+00002cc1  Transmit_4G                   
+00002de9  Transmit_CAT_M                
+00002f11  CAT_M                         
+00003035  EMB_Physical_Address_set      
+00003279  LoRa                          
+00003395  NB_IoT                        
+000034b1  Init_Buttons                  
+000035c5  PowerupCheckBG96              
+000036d5  PowerupCheckEG91              
+000037e5  ldexp                         
+000037e5  ldexpl                        
+000037e5  scalbn                        
+000037e5  scalbnl                       
+000038f5  EMB_Exchange_Data             
+00003a01  LTE_4G                        
+00003b0d  Disable_ADC                   
+00003c09  __aeabi_dmul                  
+00003d05  main                          
+00003df5  Current_handler               
+00003ee1  Transmit_NB_IOT               
+00003fb5  BG96_setting                  
+00004081  Init_CAT_M                    
+000041f5  Init_NB_IOT                   
+000042a1  Connect_4G                    
+0000433d  __aeabi_memcpy                
+0000433d  __aeabi_memcpy4               
+0000433d  __aeabi_memcpy8               
+0000433d  memcpy                        
+000043d9  __aeabi_uldivmod              
+00004471  Connect_NB_IOT                
+000044f9  __aeabi_cdcmpeq               
+000044f9  __aeabi_cdcmple               
+0000457f  __aeabi_cdrcmple              
+00004605  Connect_CAT_M                 
+00004689  Init_ADC                      
+0000470d  InitLoRaWAN                   
+0000478d  EMB_Network_Adres             
+00004809  EMB_Network_ID                
+00004885  __aeabi_memclr                
+00004885  __aeabi_memclr4               
+00004885  __aeabi_memclr8               
+00004887  __aeabi_memset                
+00004887  __aeabi_memset4               
+00004887  __aeabi_memset8               
+0000488d  memset                        
+00004901  SystemInit                    
+000049e7  __aeabi_d2f                   
+00004a55  __TI_decompress_lzss          
+00004abd  frexp                         
+00004abd  frexpl                        
+00004b21  ADC14_IRQHandler              
+00004b21  ADC14_IRQHandler              
+00004b81  BG96_Startup                  
+00004bdd  EG91_Startup                  
+00004c39  Init_ADC_BG96                 
+00004c95  Init_ADC_EG91                 
+00004cf1  Init_ADC_EMB                  
+00004d4d  UART_A0_Init                  
+00004da9  UART_A1_Init                  
+00004e05  UART_A3_Init                  
+00004eb9  EMB_Network_Pref              
+00004f0d  EMB_Startup                   
+00004f61  EUSCIA0_IRQHandler            
+00004f61  EUSCIA0_IRQHandler            
+00004fb5  EUSCIA1_IRQHandler            
+00004fb5  EUSCIA1_IRQHandler            
+00005009  EUSCIA2_IRQHandler            
+00005009  EUSCIA2_IRQHandler            
+0000505d  EUSCIA3_IRQHandler            
+0000505d  EUSCIA3_IRQHandler            
+000050b1  ltoa                          
+00005159  atoi                          
+000051a5  __aeabi_d2iz                  
+000051ed  EMB_Network_Start             
+00005231  EMB_Network_Stop              
+00005275  EMB_Reset                     
+000052b9  __TI_auto_init_nobinit_nopinit
+000052fd  Init_4G                       
+0000533d  sprintf                       
+0000537d  uart_puts_BG96                
+000053bd  uart_puts_EG91                
+0000543d  Message_counter               
+00005479  _c_int00_noargs               
+000054b1  __aeabi_f2d                   
+000054e9  Reset_Index                   
+0000551d  Systick_delay                 
+0000554d  __aeabi_i2d                   
+0000557d  CS_setDCOCenteredFrequency    
+000055a1  Disable_UART                  
+000055c5  Interrupt_setPriority         
+000055e9  SysTick_Handler               
+000055e9  SysTick_Handler               
+00005609  memccpy                       
+00005625  MCU_led                       
+0000563d  TransmitLoRaWAN               
+0000566d  strchr                        
+00005683  copysign                      
+00005683  copysignl                     
+00005697  strlen                        
+000056ab  atof                          
+000056bd  wcslen                        
+000056cf  ConnectLoRaWAN                
+000056df  __TI_decompress_none          
+000056ed  Reset_Handler                 
+000056f9  __TI_zero_init                
+00005711  __aeabi_errno_addr            
+00005719  _system_pre_init              
+0000571d  C$$EXIT                       
+0000571d  abort                         
+00005720  _ctypes_                      
+00005940  BG96_UART_Config              
+00005964  EG91_UART_Config              
+00005988  EMB_UART_Config               
+000059ac  upModeConfig                  
+000059c4  compareConfig                 
+000059ec  __TI_Handler_Table_Base       
+000059f8  __TI_Handler_Table_Limit      
+00005a00  __TI_CINIT_Base               
+00005a10  __TI_CINIT_Limit              
 20000000  StringToSend                  
-20002fa8  MovAvgConnected               
-20003c28  MovAvgIdle                    
-200048a8  MovAvgInitialising            
-20005528  MovAvgTransmission            
-200061a8  RXBuffer                      
-20006270  MQTLogin                      
-20006308  MQTPUB                        
-200063a0  MQTSEND                       
-20006438  MQTSUB                        
-200064d0  StringPost                    
-20006568  StringURL                     
-20006600  constant                      
-20006614  tempchar                      
-2000661c  Cell                          
-20006620  GPS_Lat                       
-20006624  GPS_Lon                       
-20006628  LAC                           
-2000662c  MCC                           
-20006630  MNC                           
-20006634  Network                       
-20006638  PostLength                    
-2000663c  Sequence                      
-20006640  SignalStrength                
-20006644  Size                          
-20006648  bcl                           
-2000664c  m_characters                  
-20006650  pa                            
-20006654  pmic                          
-20006658  r                             
-2000665c  rsrp                          
-20006660  rsrq                          
-20006664  rssi                          
-20006668  s                             
-2000666c  sinr                          
-20006670  vbat                          
-20006674  xo                            
-20006678  xx                            
-2000667c  GNSS_BG96                     
-2000667d  j                             
-2000667e  startup                       
-20006680  Module_status                 
-20006688  MovAvgIdleIndex               
-2000668c  MovAvgInitialisingIndex       
-20006690  MovAvgConnectedIndex          
-20006694  MovAvgTransmissionIndex       
-2000669c  cc                            
-200066a0  Checksum                      
-200066a1  Messagefield                  
-200066a2  Checksumfield                 
-200066a3  Receive_done                  
-200066a4  Powerup_done                  
-200066a5  i                             
-200066a6  x                             
-200066a7  y                             
-200066a8  ii                            
-200066a9  counter                       
-200066aa  AT_Error                      
-200066ac  message2                      
-200066b0  IndexCounter                  
-200066b4  GPS_Count                     
-200066b8  status                        
-200066bc  Ticks                         
-200066c0  Password                      
-200066e9  ClientID                      
-2000670e  Username                      
-20006734  errno                         
+20004330  MovAvgConnected               
+20004fb0  MovAvgIdle                    
+20005c30  MovAvgInitialising            
+200068b0  MovAvgTransmission            
+20007530  TransmitSize                  
+20007724  RXBuffer                      
+200077ec  StringPost                    
+20007884  StringURL                     
+2000791c  tempchar                      
+20007924  Cell                          
+20007928  GPS_Lat                       
+2000792c  GPS_Lon                       
+20007930  LAC                           
+20007934  MCC                           
+20007938  MNC                           
+2000793c  Network                       
+20007940  PostLength                    
+20007944  Sequence                      
+20007948  SignalStrength                
+2000794c  Size                          
+20007950  m_characters                  
+20007954  r                             
+20007958  s                             
+2000795c  xx                            
+20007960  EMB_length                    
+20007961  GNSS_BG96                     
+20007962  j                             
+20007963  startup                       
+20007964  Module_status                 
+20007968  selectL                       
+2000796c  selectN                       
+20007970  selectC                       
+20007974  select4                       
+20007978  select                        
+20007980  MovAvgIdleIndex               
+20007984  MovAvgInitialisingIndex       
+20007988  MovAvgConnectedIndex          
+2000798c  MovAvgTransmissionIndex       
+20007994  cc                            
+20007998  Checksum                      
+20007999  Messagefield                  
+2000799a  Checksumfield                 
+2000799b  Receive_done                  
+2000799c  Powerup_done                  
+2000799d  i                             
+2000799e  x                             
+2000799f  y                             
+200079a0  ii                            
+200079a1  counter                       
+200079a2  AT_Error                      
+200079a4  message2                      
+200079a8  IndexCounter                  
+200079ac  GPS_Count                     
+200079b0  status                        
+200079b1  CRC                           
+200079b4  Ticks                         
+200079b8  errno                         
 2000fe00  __stack                       
 20010000  __STACK_END                   
 4000480c  WDTCTL_SYM                    
@@ -872,4 +837,4 @@ ffffffff  binit
 UNDEFED   __mpu_init                    
 UNDEFED   _system_post_cinit            
 
-[264 symbols]
+[256 symbols]

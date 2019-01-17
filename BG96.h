@@ -10,12 +10,12 @@ void BG96_setting(void);
 /* CAT-M */
 void Init_CAT_M(void);
 void Connect_CAT_M(void);
-void Transmit_CAT_M(void);
+void Transmit_CAT_M(uint8_t UDPsize);
 
 /*NB-IoT */
 void Init_NB_IOT(void);
 void Connect_NB_IOT(void);
-void Transmit_NB_IOT(void);
+void Transmit_NB_IOT(uint8_t UDPsize);
 
 /* 2G GPRS */
 void Connect_2G_BG96(void);
@@ -34,6 +34,7 @@ char MQTSUB[150];
 char MQTPUB[150];
 char MQTSEND[150];
 char constant[20];
+char TransmitSize[500];
 int PostLength;
 
 char ClientID[] = "16e70430-f480-11e8-9c33-75e6b356cec4";
@@ -42,7 +43,7 @@ char Password[] = "5eaef0ad685ca558a7a9317d60c758976874d3b1";
 
 void BG96_setting(void)
 {
-    uart_puts_BG96("AT+QCFG=\"band\",1,80000,80000,1\r");
+    uart_puts_BG96("AT+QCFG=\"band\",1,80000,80,1\r");
     ReceiveCheckQuectel();
 
     uart_puts_BG96("AT+QCFG=\"nwscanseq\",030201,1\r");
@@ -64,8 +65,6 @@ void Init_CAT_M(void)
     Network = 2;    //active network
     MCC = 204;  //Mobile Country Code
     MNC = 8;    //Mobile Network Code
-    Size = 128;    //test data size in bytes
-    //Sequence = 0;
 
     uart_puts_BG96("AT+CFUN=0\r"); //NL KPN
     Systick_delay(2000);
@@ -78,12 +77,8 @@ void Init_CAT_M(void)
     Systick_delay(1000);
     ReceiveCheckQuectel();
 
-    uart_puts_BG96("AT+QICSGP=1,1,\"INTERNET.M2M\"\r"); //KPN
-    Systick_delay(1000);
-    ReceiveCheckQuectel();
-
     uart_puts_BG96("AT+CFUN=1\r"); //NL KPN
-    Systick_delay(2000);
+    Systick_delay(1000);
     ReceiveCheckQuectel();
 
     /*
@@ -95,12 +90,87 @@ void Init_CAT_M(void)
 void Connect_CAT_M(void)
 {
     uart_puts_BG96("AT+COPS= 1,2,\"20408\",8\r"); //NL KPN
-    Systick_delay(2000);
+    Systick_delay(1000);
     ReceiveCheckQuectel();
 
     while (counter < 5 && SignalStrength == 0)
     {
         uart_puts_EG91("AT+CSQ\r");
+        QuectelCSQCheck();
+        counter++;
+    }
+
+    uart_puts_BG96("AT+QNWINFO\r");
+    Systick_delay(100);
+    ReceiveCheckQuectel();
+
+    counter = 0;
+}
+
+void Transmit_CAT_M(uint8_t UDPsize)
+{
+    uart_puts_BG96("AT+QIACT=1\r");
+    Systick_delay(100);
+    ReceiveCheckQuectel();
+
+    uart_puts_BG96("AT+QIOPEN=1,0,\"TCP\",\"220.180.239.212\",8009,0,1\r"); //NL KPN
+    Systick_delay(100);
+    ReceiveCheckQuectel();
+
+    for (s = 0; s < UDPsize; s++)
+    {
+        sprintf(TransmitSize, "1%s", TransmitSize);
+    }
+
+    uart_puts_BG96("AT+QISEND=0\r");
+    Systick_delay(100);
+    ReceiveCheckQuectel();
+
+    uart_puts_BG96(TransmitSize); //Stuur UDP bericht
+    Systick_delay(100);
+    ReceiveCheckQuectel();
+
+    MAP_UART_transmitData(EUSCI_A0_BASE, 0x1a);// CTRL+Z
+    ReceiveCheckQuectel();
+
+    uart_puts_BG96("AT+QICLOSE\r");
+    Systick_delay(100);
+    ReceiveCheckQuectel();
+
+    uart_puts_BG96("AT+QIDEACT=1\r");
+    Systick_delay(100);
+    ReceiveCheckQuectel();
+}
+
+void Init_NB_IOT(void) //T-Mobile
+{
+    Network = 3;    //active network
+    MCC = 204;  //Mobile Country Code
+    MNC = 4;    //Mobile Network Code
+
+    uart_puts_BG96("AT+QCFG=\"iotopmode\",1,1\r");
+    ReceiveCheckQuectel();
+
+    uart_puts_BG96("AT+QCFG=\"roamservice\",1,1\r");
+    ReceiveCheckQuectel();
+
+    uart_puts_BG96("AT+CGDCONT=1,\"IP\",\"cdp.iot.t-mobile.nl\"\r"); //T-Mobile
+    Systick_delay(1000);
+    ReceiveCheckQuectel();
+
+    //PowerupCheckBG96(1);  //reset
+    //Systick_delay(500); //opstart tijd nodig voordat SIM uitgelezen kan worden
+}
+
+void Connect_NB_IOT(void)
+{
+    uart_puts_BG96("AT+COPS= 1,2,\"20416\",9\r"); //Vodafone
+    Systick_delay(4000);
+    ReceiveCheckQuectel();
+
+    while (counter < 5 && SignalStrength == 0)
+    {
+        uart_puts_BG96("AT+CSQ\r");
         QuectelCSQCheck();
         counter++;
     }
@@ -112,21 +182,15 @@ void Connect_CAT_M(void)
     counter = 0;
 }
 
-void Transmit_CAT_M(void)
-{
-    uart_puts_BG96("AT+QPING=1,\"8.8.8.8\",15,4\r");
-    Systick_delay(2000);
-    ReceiveCheckQuectel();
-}
 
 /* NB-IoT Functions */
+/*
 void Init_NB_IOT(void) //VODAFONE
 {
     Network = 3;    //active network
     MCC = 204;  //Mobile Country Code
     MNC = 6;    //Mobile Network Code
     Size = 128;    //test data size in bytes
-   // Sequence = 0;
 
     uart_puts_BG96("AT+QCFG=\"iotopmode\",2,1\r");
     ReceiveCheckQuectel();
@@ -157,13 +221,31 @@ void Connect_NB_IOT(void)
     ReceiveCheckQuectel();
 
     counter = 0;
-}
+}*/
 
-void Transmit_NB_IOT(void)
+void Transmit_NB_IOT(uint8_t UDPsize)
 {
-    uart_puts_BG96("AT+QPING=1,\"8.8.8.8\",15,4\r");
-    Systick_delay(3000);
+    uart_puts_BG96("AT+QIOPEN=1,0,\"UDP\",\"172.27.131.100\",15683\r");// Open UDP
+    Systick_delay(100);
     ReceiveCheckQuectel();
+
+    for (s = 0; s < UDPsize; s++)
+    {
+        sprintf(TransmitSize, "%s1", TransmitSize);
+    }
+
+    uart_puts_BG96("AT+QISEND=0,1\r");
+    Systick_delay(100);
+    ReceiveCheckQuectel();
+
+    uart_puts_BG96(TransmitSize);//Stuur UDP bericht
+    ReceiveCheckQuectel();
+
+    uart_puts_BG96("AT+QICLOSE=0\r");//Sluit UDP
+    Systick_delay(100);
+    ReceiveCheckQuectel();
+
+    Systick_delay(3000);
 }
 
 
