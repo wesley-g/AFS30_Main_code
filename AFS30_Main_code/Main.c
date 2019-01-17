@@ -1,4 +1,3 @@
-
 /* DriverLib Includes */
 #include <ti/devices/msp432p4xx/driverlib/driverlib.h>
 
@@ -7,17 +6,18 @@
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <ti/grlib/grlib.h>        // graphics library
 
 #include <GPIO.h>            // GPIO header file
 #include <Current.h>         // current monitoring header file
 #include <Message_handler.h> // message handling header file
 #include <MSP_UART.h>        // UART_header file
+#include <Current.h>         // current monitoring header file
 
 #include <EMB_LR1272.h>      // EMBIT header file
 #include <BG96.h>            // Quectel BG96 header file
 #include <EG91.h>            // Quectel EG91 header file
 #include <INP6000.h>         // Innophase header file
+
 
 void Systick_delay(uint16_t time);
 
@@ -26,13 +26,14 @@ volatile uint32_t Ticks = 0;
 int main(void)
 {
     /* Halting WDT  */
+    MAP_WDT_A_holdTimer();
     CS_setDCOCenteredFrequency(CS_DCO_FREQUENCY_12);
 
-    Interrupt_setPriority(INT_EUSCIA0, 0x00); // highest priority
-    Interrupt_setPriority(INT_EUSCIA1, 0x00); // highest priority
-    Interrupt_setPriority(INT_EUSCIA2, 0x00); // highest priority
-    Interrupt_setPriority(INT_EUSCIA3, 0x00); // highest priority
-    Interrupt_setPriority(INT_ADC14, 0x20); // lower priority
+    Interrupt_setPriority(INT_EUSCIA0 , 0x00); // highest priority
+    Interrupt_setPriority(INT_EUSCIA1 , 0x00); // highest priority
+    Interrupt_setPriority(INT_EUSCIA2 , 0x00); // highest priority
+    Interrupt_setPriority(INT_EUSCIA3 , 0x00); // highest priority
+    Interrupt_setPriority(INT_ADC14 , 0x20);   // lower priority
 
     /* Configuring Systick */
     MAP_SysTick_enableModule();
@@ -42,7 +43,6 @@ int main(void)
     /* Setting up clocks
      * MCLK = MCLK = 3MHz
      * ACLK = REFO = 32Khz */
-
     MAP_CS_initClockSignal(CS_ACLK, CS_REFOCLK_SELECT, CS_CLOCK_DIVIDER_1);
 
     MCU_led();
@@ -51,34 +51,14 @@ int main(void)
     MAP_GPIO_setOutputLowOnPin(GPIO_PORT_P8, GPIO_PIN6);   //MCU LED on PORT 8 PIN 6
 
     BG96_Startup();
+    BG96_setting();
     EG91_Startup();
-    BG96_setting(); // set NB-IoT and CAT-M settings
 
     while (1)
     {
-        Check_Buttons();  // invoer welke netwerken  <--------------
-        Size = 20;       // invoer bytes            <--------------
-
-        if (select4 == 1)
-        {
-            LTE_4G(Size);
-        }
-
-        if (selectL == 1)
-        {
-            LoRa(Size);
-        }
-
-        if (selectC == 1)
-        {
-            CAT_M(Size);
-        }
-
-        if (selectN == 1)
-        {
-            NB_IoT(Size);
-        }
+         Check_Buttons();
     }
+
 } // end of main
 
 /* EUSCI A0 UART ISR */
@@ -133,28 +113,7 @@ void EUSCIA3_IRQHandler(void)
     }
 }
 
-// ADC14 ISR
-void ADC14_IRQHandler(void)
-{
-    uint64_t status;
-
-    status = MAP_ADC14_getEnabledInterruptStatus();
-    MAP_ADC14_clearInterruptFlag(status);
-
-    if (status & ADC_INT0)
-    {
-        CurrentAverage = MAP_ADC14_getResult(ADC_MEM0);
-        Current_handler();
-
-        if (MovAvgsIndex >= numMovAvgs)
-        {
-            MovAvgsIndex = 0;
-        }
-    }
-}
-
-/*
-// ADC14 ISR /
+/* ADC14 ISR */
 void ADC14_IRQHandler(void)
 {
     uint64_t status;
@@ -185,8 +144,9 @@ void ADC14_IRQHandler(void)
         }
 
         CurrentAverage = Readingstotal / numReadings; // 1 average has been calculated
+
     }
-}*/
+}
 
 void Systick_delay(uint16_t time)
 {
@@ -196,6 +156,8 @@ void Systick_delay(uint16_t time)
     */
     Ticks = 0;
     while(Ticks != time);
+
+
 }
 
 void SysTick_Handler(void)

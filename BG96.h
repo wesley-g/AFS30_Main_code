@@ -1,3 +1,4 @@
+
 #ifndef BG96_H_
 #define BG96_H_
 
@@ -494,5 +495,4 @@ void close_MyCayenne(void)
     ReceiveCheckQuectel();
 }
 
-
-#endif /* BG96_H_ */
+#endif /* BG96.h */

@@ -1,13 +1,5 @@
-
 #ifndef MSP_UART_H_
 #define MSP_UART_H_
-
-#include <ti/devices/msp432p4xx/driverlib/driverlib.h>
-
-#include <stdint.h>
-#include <stdbool.h>
-#include <stdio.h>
-#include <stdlib.h>
 
 /////////////* function prototypes *//////////////////
 void UART_A0_Init(void); //BG96
@@ -95,7 +87,7 @@ void UART_A1_Init(void) //EMB UART interface
     MAP_GPIO_setAsPeripheralModuleFunctionInputPin(GPIO_PORT_P2, GPIO_PIN2 | GPIO_PIN3, GPIO_PRIMARY_MODULE_FUNCTION);
 
     /* Configuring UART Module */
-    MAP_UART_initModule(EUSCI_A1_BASE, &EMB_UART_Config); //&EMB_UART_Config
+    MAP_UART_initModule(EUSCI_A1_BASE, &EMB_UART_Config);
 
     /* Enable UART module */
     MAP_UART_enableModule(EUSCI_A1_BASE);
